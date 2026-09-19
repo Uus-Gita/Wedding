@@ -298,29 +298,34 @@
         </div>
       </section>
 
-      <!-- SLIDE 9: Wishes / RSVP -->
+      <!-- SLIDE 9: Wishes / RSVP (Menggunakan FormSubmit ke rizqi.ridwan25@gmail.com) -->
       <section id="slide-9" class="full-slide">
         <h2 class="slide-title animate-left">Wishes</h2>
         <p class="sub-text animate-right">Konfirmasi Kehadiran & Kirim Ucapan Harapan.</p>
 
-        <form class="rsvp-form animate-left" id="rsvp-form" onsubmit="handleRSVP(event)">
+        <form class="rsvp-form animate-left" id="rsvp-form" action="https://formsubmit.co/rizqi.ridwan25@gmail.com" method="POST" onsubmit="handleRSVP(event)">
+          <!-- Pengaturan FormSubmit -->
+          <input type="hidden" name="_subject" value="📩 RSVP & Wedding Pass Baru dari Tamu Undangan!">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+
           <label>Nama Lengkap</label>
-          <input type="text" id="rsvp-name" placeholder="Nama Kamu" required>
+          <input type="text" name="Nama_Tamu" id="rsvp-name" placeholder="Nama Kamu" required>
 
           <label>Keterangan</label>
-          <select id="rsvp-attendance">
+          <select name="Kehadiran" id="rsvp-attendance">
             <option value="Ya, Saya Akan Hadir">Ya, Saya Akan Hadir</option>
             <option value="Maaf, Saya Tidak Bisa Hadir">Maaf, Saya Tidak Bisa Hadir</option>
           </select>
 
           <label>Jumlah Tamu</label>
-          <select id="rsvp-guests">
+          <select name="Jumlah_Tamu" id="rsvp-guests">
             <option value="1 Orang">1 Orang</option>
             <option value="2 Orang">2 Orang</option>
           </select>
 
           <label>Pesan</label>
-          <textarea id="rsvp-message" rows="3" placeholder="Tulis Harapanmu...."></textarea>
+          <textarea name="Pesan_Dan_Doa" id="rsvp-message" rows="3" placeholder="Tulis Harapanmu...."></textarea>
 
           <button type="submit" class="btn-action">Kirim</button>
         </form>
