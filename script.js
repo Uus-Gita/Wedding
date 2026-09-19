@@ -12,17 +12,22 @@ function openInvitation() {
   document.body.classList.remove('no-scroll');
 
   const music = document.getElementById('bg-music');
+  const btn = document.getElementById('music-btn');
   if (music) {
     music.play().catch(e => console.log(e));
+    if (btn) btn.classList.add('playing');
   }
 }
 
 function toggleMusic() {
   const music = document.getElementById('bg-music');
+  const btn = document.getElementById('music-btn');
   if (music.paused) {
     music.play();
+    if (btn) btn.classList.add('playing');
   } else {
     music.pause();
+    if (btn) btn.classList.remove('playing');
   }
 }
 
@@ -33,9 +38,9 @@ function copyText(text) {
 }
 
 // ==========================================
-// 2. COUNTDOWN TIMER (02 OKTOBER 2026)
+// 2. COUNTDOWN TIMER (04 OKTOBER 2026)
 // ==========================================
-const targetDate = new Date("Oct 2, 2026 08:00:00").getTime();
+const targetDate = new Date("Oct 4, 2026 08:00:00").getTime();
 
 setInterval(function() {
   const now = new Date().getTime();
@@ -151,9 +156,8 @@ function capturePhoto() {
 
   if (!video.srcObject) return;
 
-  // Ukuran kanvas dipaksa murni vertikal (potret)
-  canvas.width = 720;
-  canvas.height = 960;
+  canvas.width = 1000;
+  canvas.height = 1000; 
   const ctx = canvas.getContext('2d');
 
   const vWidth = video.videoWidth;
@@ -162,53 +166,57 @@ function capturePhoto() {
   
   if (vWidth > vHeight) {
     sHeight = vHeight;
-    sWidth = vHeight * (720 / 960);
+    sWidth = vHeight;
     sX = (vWidth - sWidth) / 2;
     sY = 0;
   } else {
     sWidth = vWidth;
-    sHeight = vWidth * (960 / 720);
+    sHeight = vWidth;
     sX = 0;
     sY = (vHeight - sHeight) / 2;
-    if (sY < 0) {
-      sHeight = vHeight;
-      sWidth = vHeight * (720 / 960);
-      sX = (vWidth - sWidth) / 2;
-      sY = 0;
-    }
   }
 
   ctx.drawImage(video, sX, sY, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
 
-  // Tambahkan Stiker / Watermark
-  ctx.fillStyle = "rgba(139, 38, 62, 0.9)";
-  ctx.fillRect(30, canvas.height - 150, canvas.width - 60, 110);
+  const templateImg = new Image();
+  templateImg.src = 'Galery/booth.jpg'; 
+  
+  templateImg.onload = function() {
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+    const tempCtx = tempCanvas.getContext('2d');
+    
+    tempCtx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
+    const imgData = tempCtx.getImageData(0, 0, canvas.width, canvas.height);
+    const pixels = imgData.data;
 
-  ctx.fillStyle = "#fef3d6";
-  ctx.font = "20px sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText("✨ Happy Wedding ✨", canvas.width / 2, canvas.height - 110);
+    for (let i = 0; i < pixels.length; i += 4) {
+      let red = pixels[i];
+      let green = pixels[i + 1];
+      let blue = pixels[i + 2];
 
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "bold 28px 'Poppins', sans-serif";
-  ctx.fillText("Uus & Gita", canvas.width / 2, canvas.height - 75);
+      if (green > 90 && green > red + 30 && green > blue + 30) {
+        pixels[i + 3] = 0; // Transparan
+      }
+    }
 
-  ctx.font = "18px sans-serif";
-  ctx.fillText("02.10.2026", canvas.width / 2, canvas.height - 45);
+    tempCtx.putImageData(imgData, 0, 0);
+    ctx.drawImage(tempCanvas, 0, 0);
 
-  const dataURL = canvas.toDataURL('image/png');
-  resultImg.src = dataURL;
-  downloadBtn.href = dataURL;
+    const dataURL = canvas.toDataURL('image/png');
+    resultImg.src = dataURL;
+    downloadBtn.href = dataURL;
 
-  uploadPhotoToGoogleDrive(dataURL);
+    uploadPhotoToGoogleDrive(dataURL);
+  };
 
   if (mediaStream) {
     mediaStream.getTracks().forEach(track => track.stop());
   }
 
   video.style.display = 'none';
-  if (watermark) watermark.style.display = 'block'; 
+  if (watermark) watermark.style.display = 'none'; 
   resultImg.style.display = 'block';
 
   if (btnSwitch) btnSwitch.style.display = 'none';
@@ -239,7 +247,7 @@ function retakePhoto() {
 }
 
 // ==========================================
-// 5. RSVP & E-ID CARD (TERINTEGRASI GOOGLE SHEETS)
+// 5. RSVP & E-ID CARD (KIRIM KE EMAIL & MODAL)
 // ==========================================
 function handleRSVP(event) {
   event.preventDefault();
@@ -268,17 +276,18 @@ function handleRSVP(event) {
     }).catch(error => console.error("Error RSVP:", error));
   }
 
-  if (attendance.toLowerCase().includes('hadir') || attendance === 'Yes') {
-    const guestNameEl = document.getElementById('card-guest-name');
-    const guestCountEl = document.getElementById('card-guest-count');
-    const modalEl = document.getElementById('idcard-modal');
+  const nameEl = document.getElementById('card-guest-name');
+  const countEl = document.getElementById('card-guest-count');
+  const statusEl = document.getElementById('card-attendance-status');
+  const msgEl = document.getElementById('card-guest-message');
 
-    if (guestNameEl) guestNameEl.innerText = name;
-    if (guestCountEl) guestCountEl.innerText = guests;
-    if (modalEl) modalEl.classList.add('active');
-  } else {
-    alert('Terima kasih atas ucapan dan konfirmasinya!');
-  }
+  if (nameEl) nameEl.innerText = name;
+  if (countEl) countEl.innerText = guests;
+  if (statusEl) statusEl.innerText = attendance;
+  if (msgEl) msgEl.innerText = `"${message || '-'}"`;
+
+  const modalEl = document.getElementById('idcard-modal');
+  if (modalEl) modalEl.classList.add('active');
   
   const formEl = document.getElementById('rsvp-form');
   if (formEl) formEl.reset();
@@ -333,3 +342,73 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+// ==========================================
+// 7. INTERSECTION OBSERVER UNTUK ANIMASI KIRI & KANAN (TIDAK SILANG)
+// ==========================================
+document.addEventListener("DOMContentLoaded", function() {
+  const leftElements = document.querySelectorAll('.slide-title, .calendar-card, .rsvp-form, .thanks-opening, .polaroid-wrapper .polaroid:nth-child(1)');
+  const rightElements = document.querySelectorAll('.verse-text, .live-calendar-card, .thanks-couples, .polaroid-wrapper .polaroid:nth-child(2)');
+
+  const profileCards = document.querySelectorAll('.profile-card');
+  if (profileCards.length >= 2) {
+    profileCards[0].classList.add('animate-left');
+    profileCards[1].classList.add('animate-right');
+  }
+
+  const atmCards = document.querySelectorAll('.atm-card');
+  if (atmCards.length >= 2) {
+    atmCards[0].classList.add('animate-left');
+    atmCards[1].classList.add('animate-right');
+  }
+
+  const galleryItems = document.querySelectorAll('.gallery-grid .grid-item');
+  galleryItems.forEach((item, index) => {
+    if (index === 0) {
+      item.classList.add('animate-left');
+    } else if (index % 2 !== 0) {
+      item.classList.add('animate-left');
+    } else {
+      item.classList.add('animate-right');
+    }
+  });
+
+  leftElements.forEach(el => el.classList.add('animate-left'));
+  rightElements.forEach(el => el.classList.add('animate-right'));
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+      } else {
+        entry.target.classList.remove('active');
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.animate-left, .animate-right').forEach(el => {
+    observer.observe(el);
+  });
+});
+
+// ==========================================
+// 8. FITUR TAMBAH KE KALENDER (GOOGLE CALENDAR)
+// ==========================================
+function addToCalendar() {
+  const title = "Pernikahan Uus & Gita";
+  const details = "Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara pernikahan kami. Lokasi: Blok Jumat RT 001 / RW 001 Desa Cisambeng, Kec. Palasah, Kab. Majalengka.";
+  const location = "Desa Cisambeng, Kec. Palasah, Kab. Majalengka";
+  
+  const startTime = "20261004T020000Z";
+  const endTime = "20261004T100000Z";
+
+  const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startTime}/${endTime}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(location)}`;
+
+  window.open(googleUrl, '_blank');
+}
