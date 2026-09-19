@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Uus & Gita Wedding</title>
 
   <!-- Google Fonts -->
@@ -13,24 +13,26 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <link rel="stylesheet" href="style.css?v=17">
+  <!-- File CSS Utama -->
+  <link rel="stylesheet" href="style.css?v=21">
 </head>
 <body class="no-scroll">
 
-  <!-- Container Efek Love Berjatuhan -->
+  <!-- Container Efek Love Berjatuhan (Background) -->
   <div id="hearts-container"></div>
 
   <!-- Audio Background -->
-  <audio id="bg-music" loop>
+  <audio id="bg-music" loop preload="auto">
     <source src="Galery/musik.mp3.mpeg" type="audio/mpeg">
+    Maaf, browser Anda tidak mendukung tag audio.
   </audio>
 
   <!-- Tombol Musik Melayang -->
-  <button id="music-btn" class="floating-music" onclick="toggleMusic()">
+  <button id="music-btn" class="floating-music" onclick="toggleMusic()" aria-label="Toggle Music">
     <i class="fa-solid fa-music"></i>
   </button>
 
-  <!-- Bottom Navigation Bar (11 Slide) -->
+  <!-- Bottom Navigation Bar (Menu Bawah) -->
   <nav class="bottom-nav">
     <a href="#slide-1" class="nav-item active" title="Cover"><i class="fa-solid fa-house"></i></a>
     <a href="#slide-2" class="nav-item" title="Verse"><i class="fa-solid fa-quote-left"></i></a>
@@ -45,115 +47,127 @@
     <a href="#slide-11" class="nav-item" title="Thanks"><i class="fa-solid fa-heart"></i></a>
   </nav>
 
-  <!-- Konten Utama Container HP -->
+  <!-- Konten Utama (Di dalam Bingkai HP) -->
   <main id="main-content" class="main-container">
 
     <!-- Hiasan Bunga Melayang Pas di 4 Pojok Bingkai HP -->
-    <img src="Galery/bunga.png" class="floral-corner top-left" alt="Bunga Kiri Atas">
-    <img src="Galery/bunga.png" class="floral-corner top-right" alt="Bunga Kanan Atas">
-    <img src="Galery/bunga.png" class="floral-corner bottom-left" alt="Bunga Kiri Bawah">
-    <img src="Galery/bunga.png" class="floral-corner bottom-right" alt="Bunga Kanan Bawah">
+    <img src="Galery/bunga.png" class="floral-corner top-left" alt="Hiasan Bunga" loading="lazy">
+    <img src="Galery/bunga.png" class="floral-corner top-right" alt="Hiasan Bunga" loading="lazy">
+    <img src="Galery/bunga.png" class="floral-corner bottom-left" alt="Hiasan Bunga" loading="lazy">
+    <img src="Galery/bunga.png" class="floral-corner bottom-right" alt="Hiasan Bunga" loading="lazy">
 
     <!-- SLIDE 1: Cover Utama -->
     <section id="slide-1" class="cover-section">
       <div class="cover-content">
-        <p class="subtitle-doodle">THE WEDDING OF</p>
-        <h1 class="main-title">Uus & Gita</h1>
+        <p class="subtitle-doodle animate-left">THE WEDDING OF</p>
+        <h1 class="main-title animate-right">Uus & Gita</h1>
         
-        <div class="couple-photo-wrapper">
-          <img src="Galery/foto8.jpg" alt="Uus & Gita" class="couple-img">
+        <div class="couple-photo-wrapper animate-left">
+          <img src="Galery/foto1.jpg" alt="Uus & Gita" class="couple-img" loading="lazy">
         </div>
 
-        <div class="ribbon-date">
+        <div class="ribbon-date animate-right">
           <span>02.10.2026</span>
         </div>
 
         <!-- Nama Tamu Undangan -->
-        <div class="guest-container">
+        <div class="guest-container animate-left">
           <p class="guest-sub">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
           <h3 id="guest-name" class="guest-title">Tamu Undangan</h3>
         </div>
 
-        <p class="opening-text">
+        <p class="opening-text animate-right">
           Tanpa mengurangi rasa hormat, kami memberikan kabar bahagia ini dan memohon restu dari Bapak/Ibu/Saudara/i untuk senantiasa mendoakan kelancaran acara pernikahan kami.
         </p>
 
-        <button class="btn-open" onclick="openInvitation()">Buka Undangan</button>
+        <button class="btn-open animate-left" onclick="openInvitation()">Buka Undangan</button>
       </div>
     </section>
 
+    <!-- Wrapper untuk Slide yang bisa di-scroll -->
     <div class="scroll-container">
 
       <!-- SLIDE 2: Verse / Ayat -->
       <section id="slide-2" class="full-slide">
         <div class="polaroid-wrapper">
-          <div class="polaroid">
-            <img src="Galery/foto6.jpg" alt="Gita">
+          <div class="polaroid animate-left">
+            <img src="Galery/foto2.jpg" alt="Gita" loading="lazy">
           </div>
-          <div class="polaroid">
-            <img src="Galery/foto7.jpg" alt="Uus">
+          <div class="polaroid animate-right">
+            <img src="Galery/foto3.jpg" alt="Uus" loading="lazy">
           </div>
         </div>
-        <p class="initials">G + U = ♡</p>
-        <div class="rings-doodle">💍</div>
-        <h2 class="slide-title">Forever & Always</h2>
-        <p class="verse-text">
+        <p class="initials animate-left">U + G = ♡</p>
+        <div class="rings-doodle animate-right">💍</div>
+        <h2 class="slide-title animate-left">Forever & Always</h2>
+        <p class="verse-text animate-right">
           "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu istri-istri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya..." (QS. Ar-Rum: 21)
         </p>
       </section>
 
       <!-- SLIDE 3: Groom & Bride -->
       <section id="slide-3" class="full-slide">
-        <h2 class="slide-title">GROOM & BRIDE</h2>
+        <h2 class="slide-title animate-left">GROOM & BRIDE</h2>
 
-        <div class="profile-card">
+        <!-- Profil Uus (Kiri) -->
+        <div class="profile-card animate-left">
           <div class="oval-frame">
-            <img src="Galery/foto6.jpg" alt="Uus Busrol karim">
+            <img src="Galery/foto4.jpg" alt="Uus Busrol karim" loading="lazy">
           </div>
           <h3 class="person-name">Uus Busrol karim</h3>
           <p class="person-sub">Son of</p>
-          <p class="parents-text">Bapak Karmin (kuming)<br>& Ibu Mamah</p>
-          <p class="ig-tag"><i class="fa-brands fa-instagram"></i> @upq.us</p>
+          <p class="parents-text">Bapak Karmin (Alm)<br>& Ibu Mamah</p>
+          <p class="ig-tag">
+            <a href="https://instagram.com/upq.us" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
+              <i class="fa-brands fa-instagram"></i> @upq.us
+            </a>
+          </p>
         </div>
 
-        <span class="ampersand-doodle">&</span>
+        <span class="ampersand-doodle animate-left">&</span>
 
-        <div class="profile-card">
+        <!-- Profil Gita (Kanan) -->
+        <div class="profile-card animate-right">
           <div class="oval-frame">
-            <img src="Galery/foto7.jpg" alt="Gita">
+            <img src="Galery/foto5.jpg" alt="Gita" loading="lazy">
           </div>
           <h3 class="person-name">Gita Putri Maelani</h3>
           <p class="person-sub">Daughter of</p>
-          <p class="parents-text">Bapak Dudin cahyudin (Ade)<br>& Ibu Sri sutini</p>
-          <p class="ig-tag"><i class="fa-brands fa-instagram"></i> @gh.itazyx_</p>
+          <p class="parents-text">Bapak Dudin Cahyudin<br>& Ibu Sri Sutini</p>
+          <p class="ig-tag">
+            <a href="https://instagram.com/gh.itazyx_" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
+              <i class="fa-brands fa-instagram"></i> @gh.itazyx_
+            </a>
+          </p>
         </div>
       </section>
 
       <!-- SLIDE 4: Save The Date (Calendar) -->
       <section id="slide-4" class="full-slide">
-        <h2 class="slide-title">Save The Date</h2>
-        <div class="calendar-card">
+        <h2 class="slide-title animate-left">Save The Date</h2>
+        <div class="calendar-card animate-right">
           <div class="calendar-header">October 2026</div>
           <div class="calendar-grid">
             <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
-            <span></span><span></span><span></span><span></span><span>1</span><span class="heart-date">2</span><span>3</span>
-            <span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+            <span></span><span></span><span></span><span></span><span>1</span><span>2</span><span>3</span>
+            <span class="heart-date">4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
             <span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span>
             <span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span>
             <span>25</span><span>26</span><span>27</span><span>28</span><span>29</span><span>30</span><span>31</span>
           </div>
         </div>
-        <button class="btn-action">Add to Calendar</button>
+        <!-- Tombol Add to Calendar terhubung ke fungsi JavaScript -->
+        <button class="btn-action animate-left" onclick="addToCalendar()">Add to Calendar</button>
       </section>
 
-      <!-- SLIDE 5: Counting Down & Kalender Live -->
+      <!-- SLIDE 5: Counting Down -->
       <section id="slide-5" class="full-slide">
-        <h2 class="slide-title">Counting Down</h2>
+        <h2 class="slide-title animate-left">Counting Down</h2>
         
-        <div class="live-calendar-card">
+        <div class="live-calendar-card animate-right">
           <div class="cal-header">
             <span class="cal-badge">WEDDING DAY</span>
-            <h3 class="cal-date-title">Jumat, 02 Oktober 2026</h3>
+            <h3 class="cal-date-title">Minggu, 04 Oktober 2026</h3>
           </div>
 
           <div class="countdown-grid">
@@ -180,66 +194,52 @@
         </div>
       </section>
 
-      <!-- SLIDE 6: Wedding Event -->
+      <!-- SLIDE 6: Wedding Event (Lokasi) -->
       <section id="slide-6" class="full-slide">
-        <div class="flower-doodle">💐</div>
-        <h2 class="slide-title">Wedding Event</h2>
+        <div class="flower-doodle animate-left">💐</div>
+        <h2 class="slide-title animate-left">Wedding Event</h2>
 
-        <div class="doodle-card">
+        <div class="doodle-card animate-right">
           <h3 class="card-subtitle">Syukuran Pernikahan</h3>
-          <p class="event-date">Friday, 02 October 2026</p>
+          <p class="event-date">Jumat, 02 Oktober 2026</p>
           <p><i class="fa-solid fa-location-dot icon-maroon"></i> <strong>Lokasi Akad</strong></p>
-          <p class="address-text">Jl. Teratai Dukuhpari RT18 RW 07 Desa Leuwiseeng, Kec. Panyingkiran</p>
+          <p class="address-text">Jl. Teratai Dukuhpari RT 18 RW 07 Desa Leuwiseeng, Kec. Panyingkiran</p>
           <p><i class="fa-regular fa-clock icon-maroon"></i> 08:00 WIB - Selesai</p>
           
-          <div class="dresscode-box">
-            <p></p>
-            <div class="color-dots"><span class="dot dot-cream"></span><span class="dot dot-gold"></span></div>
-          </div>
-
           <div class="map-box">
-            <iframe class="map-iframe" src="https://maps.google.com/maps?q=-6.8009976,108.1724479&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
+            <iframe class="map-iframe" src="https://maps.google.com/maps?q=-6.8009976,108.1724479&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy" title="Lokasi Akad"></iframe>
           </div>
-
-          <a href="https://www.google.com/maps/search/?api=1&query=-6.8009976,108.1724479" target="_blank" class="btn-olive">View Location</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=-6.8009976,108.1724479" target="_blank" rel="noopener noreferrer" class="btn-olive">View Location</a>
         </div>
 
-        <div class="doodle-card">
+        <div class="doodle-card animate-left">
           <h3 class="card-subtitle">Akad Dan Resepsi</h3>
-          <p class="event-date">Minggu, 04 October 2026</p>
+          <p class="event-date">Minggu, 04 Oktober 2026</p>
           <p><i class="fa-solid fa-location-dot icon-maroon"></i> <strong>Lokasi Resepsi</strong></p>
-          <p class="address-text">Blok Jum'at RT 001 / RW 001 Desa Cisambeng, Kec.Palasah, Kab.Majalengka</p>
+          <p class="address-text">Blok Jumat RT 001 / RW 001 Desa Cisambeng, Kec. Palasah, Kab. Majalengka</p>
           <p><i class="fa-regular fa-clock icon-maroon"></i> 09:00 WIB - Selesai</p>
           
-          <div class="dresscode-box">
-            <p></p>
-            <div class="color-dots"><span class="dot dot-cream"></span><span class="dot dot-gold"></span></div>
-          </div>
-
           <div class="map-box">
-            <iframe class="map-iframe" src="https://maps.google.com/maps?q=-6.722021,108.291161&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
+            <iframe class="map-iframe" src="https://maps.google.com/maps?q=-6.722021,108.291161&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy" title="Lokasi Resepsi"></iframe>
           </div>
-
-          <a href="https://www.google.com/maps/search/?api=1&query=-6.722021,108.291161" target="_blank" class="btn-olive">View Location</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=-6.722021,108.291161" target="_blank" rel="noopener noreferrer" class="btn-olive">View Location</a>
         </div>
       </section>
 
-      <!-- SLIDE 7: Live Photo Booth (Menyatu dalam 1 Kotak Polaroid Dinamis) -->
+      <!-- SLIDE 7: Live Photo Booth -->
       <section id="slide-7" class="full-slide photobooth-section">
-        <div class="camera-doodle">📸</div>
-        <h2 class="slide-title">Wedding Photobooth</h2>
-        <p class="sub-text" style="font-size: 12px; color: var(--text-dark); margin-bottom: 8px;">
+        <div class="camera-doodle animate-left">📸</div>
+        <h2 class="slide-title animate-left">Wedding Photobooth</h2>
+        <p class="sub-text animate-right" style="font-size: 12px; color: var(--text-dark); margin-bottom: 8px;">
           Ambil selfie atau foto seru kamu dengan bingkai spesial Uus & Gita!
         </p>
 
-        <div class="booth-wrapper">
-          <!-- Kotak Utama Polaroid Dinamis -->
+        <div class="booth-wrapper animate-left">
           <div class="booth-container">
             <div id="cam-view-box" class="cam-box">
-              <video id="booth-video" autoplay playsinline></video>
-              <img id="booth-result" alt="Hasil Foto" style="display:none;">
+              <video id="booth-video" autoplay playsinline muted></video>
+              <img id="booth-result" alt="Hasil Foto" style="display:none;" loading="lazy">
               
-              <!-- Garis Grid Kamera -->
               <div class="camera-grid">
                 <div class="grid-line"></div>
                 <div class="grid-line"></div>
@@ -247,36 +247,28 @@
                 <div class="grid-line"></div>
               </div>
 
-              <!-- Stiker Bingkai / Watermark -->
               <div class="booth-watermark">
                 <span>✨ Happy Wedding ✨</span>
                 <strong>Uus & Gita</strong>
                 <small>02.10.2026</small>
               </div>
             </div>
-
-            <!-- Canvas Tersembunyi untuk Proses Foto -->
             <canvas id="booth-canvas" style="display:none;"></canvas>
           </div>
 
-          <!-- Panel Kontrol Tombol di Bawah -->
           <div class="camera-controls">
             <button id="btn-start-cam" class="control-btn-left" onclick="startCamera()" title="Buka Kamera">
               <i class="fa-solid fa-camera"></i>
             </button>
-
             <button id="btn-switch-cam" class="control-btn-left" onclick="switchCamera()" title="Putar Kamera" style="display:none;">
               <i class="fa-solid fa-rotate"></i>
             </button>
-
             <button id="btn-capture" class="shutter-btn" onclick="capturePhoto()" title="Ambil Foto" style="display:none;">
               <div class="shutter-inner"></div>
             </button>
-
             <button id="btn-retake" class="btn-olive" onclick="retakePhoto()" style="display:none;">
               <i class="fa-solid fa-rotate-right"></i> Ulang
             </button>
-            
             <a id="btn-download-photo" class="btn-action" style="display:none; background-color: var(--green-olive); text-decoration:none;" download="HappyWedding-UusGita.png">
               <i class="fa-solid fa-download"></i> Simpan
             </a>
@@ -286,65 +278,66 @@
 
       <!-- SLIDE 8: Our Memories -->
       <section id="slide-8" class="full-slide">
-        <h2 class="slide-title">Our Memories</h2>
+        <h2 class="slide-title animate-left">Our Memories</h2>
         <div class="gallery-grid">
-          <div class="grid-item full-width">
-            <img src="Galery/foto28.jpg" alt="Memory 1">
+          <div class="grid-item full-width animate-left">
+            <img src="Galery/foto6.jpg" alt="Memory 1" loading="lazy">
           </div>
-          <div class="grid-item portrait">
-            <img src="Galery/foto2.jpg" alt="Memory 2">
+          <div class="grid-item portrait animate-left">
+            <img src="Galery/foto7.jpg" alt="Memory 2" loading="lazy">
           </div>
-          <div class="grid-item portrait">
-            <img src="Galery/foto3.jpg" alt="Memory 3">
+          <div class="grid-item portrait animate-right">
+            <img src="Galery/foto8.jpg" alt="Memory 3" loading="lazy">
           </div>
-          <div class="grid-item portrait">
-            <img src="Galery/foto4.jpg" alt="Memory 4">
+          <div class="grid-item portrait animate-left">
+            <img src="Galery/foto9.jpg" alt="Memory 4" loading="lazy">
           </div>
-          <div class="grid-item portrait">
-            <img src="Galery/foto5.jpg" alt="Memory 5">
+          <div class="grid-item portrait animate-right">
+            <img src="Galery/foto10.jpg" alt="Memory 5" loading="lazy">
           </div>
         </div>
       </section>
 
       <!-- SLIDE 9: Wishes / RSVP -->
       <section id="slide-9" class="full-slide">
-        <h2 class="slide-title">Wishes</h2>
-        <p class="sub-text">Confirm your presence & send prayers.</p>
+        <h2 class="slide-title animate-left">Wishes</h2>
+        <p class="sub-text animate-right">Konfirmasi Kehadiran & Kirim Ucapan Harapan.</p>
 
-        <form class="rsvp-form" id="rsvp-form" onsubmit="handleRSVP(event)">
-          <label>FULL NAME</label>
-          <input type="text" id="rsvp-name" placeholder="Type your name" required>
+        <form class="rsvp-form animate-left" id="rsvp-form" onsubmit="handleRSVP(event)">
+          <label>Nama Lengkap</label>
+          <input type="text" id="rsvp-name" placeholder="Nama Kamu" required>
 
-          <label>ATTENDANCE</label>
+          <label>Keterangan</label>
           <select id="rsvp-attendance">
-            <option value="Yes">Ya, Saya Akan Hadir</option>
-            <option value="No">Maaf, Saya Tidak Bisa Hadir</option>
+            <option value="Ya, Saya Akan Hadir">Ya, Saya Akan Hadir</option>
+            <option value="Maaf, Saya Tidak Bisa Hadir">Maaf, Saya Tidak Bisa Hadir</option>
           </select>
 
-          <label>GUESTS</label>
+          <label>Jumlah Tamu</label>
           <select id="rsvp-guests">
             <option value="1 Orang">1 Orang</option>
             <option value="2 Orang">2 Orang</option>
           </select>
 
-          <label>MESSAGE</label>
-          <textarea id="rsvp-message" rows="3" placeholder="Write your prayers..."></textarea>
+          <label>Pesan</label>
+          <textarea id="rsvp-message" rows="3" placeholder="Tulis Harapanmu...."></textarea>
 
-          <button type="submit" class="btn-action">Send Wish</button>
+          <button type="submit" class="btn-action">Kirim</button>
         </form>
       </section>
 
-      <!-- SLIDE 10: Wedding Gift (SeaBank) -->
+      <!-- SLIDE 10: Wedding Gift (SeaBank) + Tombol WA -->
       <section id="slide-10" class="full-slide">
-        <div class="gift-doodle">🎁</div>
-        <h2 class="slide-title">Wedding Gift</h2>
-        <p class="opening-text">
+        <div class="gift-doodle animate-left">🎁</div>
+        <h2 class="slide-title animate-left">Wedding Gift</h2>
+        <p class="opening-text animate-right">
           Doa Restu Anda merupakan karunia yang sangat berarti bagi kami. Dan jika memberi adalah ungkapan tanda kasih Anda, Anda dapat memberi kado secara cashless.
         </p>
 
-        <div class="atm-card seabank-bg">
+        <!-- Kartu 1: Gita -->
+        <div class="atm-card seabank-bg animate-left">
           <div class="card-chip"></div>
-          <img src="Galery/download.png" class="bank-logo-img" alt="SeaBank">
+          <img src="Galery/download.png" class="bank-logo-img" alt="SeaBank" loading="lazy">
           <div class="card-details">
             <p class="holder-name">GITA</p>
             <p id="rekening-seabank-1" class="rekening-num">901743365661</p>
@@ -353,10 +346,14 @@
             Salin <i class="fa-regular fa-copy"></i>
           </button>
         </div>
+        <a href="https://wa.me/628XXXXXXXXXX?text=Halo%20Kak%20Gita,%20saya%20sudah%20mengirimkan%20hadiah%20pernikahan%20melalui%20SeaBank." target="_blank" rel="noopener noreferrer" class="btn-wa-confirm animate-left">
+          <i class="fa-brands fa-whatsapp"></i> Konfirmasi ke WhatsApp Gita
+        </a>
 
-        <div class="atm-card seabank-bg">
+        <!-- Kartu 2: Uus -->
+        <div class="atm-card seabank-bg animate-right" style="margin-top: 10px;">
           <div class="card-chip"></div>
-          <img src="Galery/download.png" class="bank-logo-img" alt="SeaBank">
+          <img src="Galery/download.png" class="bank-logo-img" alt="SeaBank" loading="lazy">
           <div class="card-details">
             <p class="holder-name">UUS BUSROL KARIM</p>
             <p id="rekening-seabank-2" class="rekening-num">901862749761</p>
@@ -365,28 +362,31 @@
             Salin <i class="fa-regular fa-copy"></i>
           </button>
         </div>
+        <a href="https://wa.me/62859106641070?text=Halo%20Kak%20Uus,%20saya%20sudah%20mengirimkan%20hadiah%20pernikahan%20melalui%20SeaBank." target="_blank" rel="noopener noreferrer" class="btn-wa-confirm animate-right">
+          <i class="fa-brands fa-whatsapp"></i> Konfirmasi ke WhatsApp Uus
+        </a>
       </section>
 
       <!-- SLIDE 11: Thanks / Penutup -->
       <section id="slide-11" class="full-slide slide-thanks">
-        <p class="thanks-opening">
+        <p class="thanks-opening animate-left">
           Merupakan suatu kebahagiaan bagi kami atas kehadiran Bapak/Ibu/Saudara/i untuk memberikan doa restu.
         </p>
 
-        <p class="thanks-sub">Hormat Kami Yang Mengundang</p>
-        <h2 class="thanks-couples">Uus & Gita</h2>
+        <p class="thanks-sub animate-right">Hormat Kami Yang Mengundang</p>
+        <h2 class="thanks-couples animate-right">Uus & Gita</h2>
 
-        <div class="thanks-credits">
-          <p class="watermark-text">Made with Love By Uus & Gita</p>
+        <div class="thanks-credits animate-left">
+          <p class="watermark-text">Made with Love By Kyzen </p>
           
           <div class="social-icons">
-            <a href="https://wa.me/628901862749761" target="_blank" class="socicon wa"><i class="fa-brands fa-whatsapp"></i></a>
-            <a href="https://instagram.com/upq.us" target="_blank" class="socicon ig"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://wa.me/62859106641070" target="_blank" rel="noopener noreferrer" class="socicon wa"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="https://instagram.com/ryz_r1" target="_blank" rel="noopener noreferrer" class="socicon ig"><i class="fa-brands fa-instagram"></i></a>
             <a href="#" class="socicon tt"><i class="fa-brands fa-tiktok"></i></a>
           </div>
 
           <p class="music-credit">
-            <i class="fa-solid fa-music"></i> Audio Background
+            <i class="fa-solid fa-music"></i> Oasis - Wonderwall
           </p>
         </div>
       </section>
@@ -394,7 +394,7 @@
     </div>
   </main>
 
-  <!-- MODAL POPUP E-ID CARD OTOMATIS -->
+  <!-- MODAL POPUP E-ID CARD / WEDDING PASS -->
   <div id="idcard-modal" class="modal-overlay">
     <div class="modal-content">
       <button class="close-modal" onclick="closeModal()">&times;</button>
@@ -406,12 +406,12 @@
         </div>
         
         <div class="card-guest-info">
-          <p class="info-label">GUEST NAME</p>
+          <p class="info-label">Nama Lengkap</p>
           <h4 id="card-guest-name">Nama Tamu</h4>
           
           <div class="card-row">
             <div>
-              <p class="info-label">GUESTS</p>
+              <p class="info-label">Jumlah Tamu</p>
               <p id="card-guest-count" class="info-val">1 Person</p>
             </div>
             <div>
@@ -421,13 +421,19 @@
           </div>
         </div>
 
-        <div class="card-qr-box">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=UusGitaWedding" alt="QR Code">
-          <p class="qr-text">Tunjukkan kartu ini saat tiba di lokasi</p>
+        <div style="background-color: #fdf5ef; border-radius: 10px; padding: 10px; border: 1px solid #ebdcd0; margin-top: 10px; text-align: left;">
+          <p style="margin: 0 0 4px 0; font-size: 11px; font-weight: bold; color: #8b263e;">✨ Status Kehadiran:</p>
+          <p id="card-attendance-status" style="margin: 0 0 8px 0; font-size: 12px; color: #333; background: #fff; padding: 5px 8px; border-radius: 4px; display: inline-block; font-weight: 500;">Hadir</p>
+          
+          <p style="margin: 0 0 4px 0; font-size: 11px; font-weight: bold; color: #8b263e;">💬 Pesan & Doa:</p>
+          <p id="card-guest-message" style="margin: 0; font-size: 11px; font-style: italic; color: #555; background: #fff; padding: 6px 8px; border-radius: 4px; line-height: 1.3;">"Doa dan ucapan..."</p>
         </div>
       </div>
 
-      <p class="save-tip">Silakan Screenshot E-Card ini sebagai bukti kehadiran.</p>
+      <div class="card-footer-text">
+         <p>Terimakasih! Konfirmasi Anda Telah Terkirim Otomatis.</p>
+         <button onclick="closeModal()" class="btn-simpan-pass">Simpan / Tutup</button>
+      </div>
     </div>
   </div>
 
