@@ -89,12 +89,13 @@ function createHeart() {
 setInterval(createHeart, 350);
 
 // ==========================================
-// 4. FITUR PHOTOBOOTH & KAMERA
+// 4. FITUR PHOTOBOOTH & GOOGLE APPS SCRIPT URL
 // ==========================================
 let mediaStream = null;
 let useFrontCamera = true;
 
-const GOOGLE_DRIVE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwyCg6Id_VhswWv5DrlcXimM_ioJyoZvyiSdlcovR3x5s_0tsfl_HHo3zTk0SH6ivV2/exec";
+// ⚠️ Ganti URL di bawah ini dengan Web App URL terbaru dari Google Apps Script akun kamu
+const GOOGLE_DRIVE_WEB_APP_URL = "SALIN_URL_WEB_APP_GAS_BARU_DISINI";
 
 async function startCamera() {
   const video = document.getElementById('booth-video');
@@ -231,14 +232,15 @@ function uploadPhotoToGoogleDrive(base64Image) {
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   const fileName = `Photobooth-UusGita-${timestamp}.png`;
 
-  const photoData = new URLSearchParams({
+  const photoData = {
     file: base64Image,
     filename: fileName
-  });
+  };
 
   fetch(GOOGLE_DRIVE_WEB_APP_URL, {
     method: 'POST',
-    body: photoData
+    body: JSON.stringify(photoData),
+    headers: { 'Content-Type': 'application/json' }
   }).catch(error => console.error("Error Upload Foto:", error));
 }
 
@@ -247,12 +249,11 @@ function retakePhoto() {
 }
 
 // ==========================================
-// 5. RSVP & E-ID CARD (MENGGUNAKAN FORMSUBMIT)
+// 5. RSVP & E-ID CARD (TERINTEGRASI GOOGLE APPS SCRIPT)
 // ==========================================
 function handleRSVP(event) {
   event.preventDefault();
   
-  const form = event.target;
   const nameInput = document.getElementById('rsvp-name');
   const attendanceInput = document.getElementById('rsvp-attendance');
   const guestsInput = document.getElementById('rsvp-guests');
@@ -263,15 +264,23 @@ function handleRSVP(event) {
   const guests = guestsInput ? guestsInput.value : "1 Orang";
   const message = messageInput ? messageInput.value : "";
 
-  // Kirim data secara background ke FormSubmit agar langsung masuk Gmail
-  const formData = new FormData(form);
-  fetch(form.action, {
-    method: 'POST',
-    body: formData,
-    headers: { 'Accept': 'json' }
-  }).catch(error => console.error("Error FormSubmit:", error));
+  // Kirim data ke Google Apps Script (masuk Gmail & Drive)
+  const rsvpData = {
+    name: name,
+    attendance: attendance,
+    guests: guests,
+    message: message
+  };
 
-  // Tampilkan E-ID Card (Wedding Pass) ke Tamu
+  if (GOOGLE_DRIVE_WEB_APP_URL && !GOOGLE_DRIVE_WEB_APP_URL.includes("URL_WEB_APP")) {
+    fetch(GOOGLE_DRIVE_WEB_APP_URL, {
+      method: 'POST',
+      body: JSON.stringify(rsvpData),
+      headers: { 'Content-Type': 'application/json' }
+    }).catch(error => console.error("Error RSVP:", error));
+  }
+
+  // Tampilkan E-ID Card (Wedding Pass) ke Tamu di Layar
   const nameEl = document.getElementById('card-guest-name');
   const countEl = document.getElementById('card-guest-count');
   const statusEl = document.getElementById('card-attendance-status');
@@ -285,7 +294,8 @@ function handleRSVP(event) {
   const modalEl = document.getElementById('idcard-modal');
   if (modalEl) modalEl.classList.add('active');
   
-  form.reset();
+  const formEl = document.getElementById('rsvp-form');
+  if (formEl) formEl.reset();
 }
 
 function closeModal() {
