@@ -34,7 +34,6 @@ img {
   display: block;
 }
 
-
 /* ==========================================
    2. EFEK LOVE BERJATUHAN (BACKGROUND)
    ========================================== */
@@ -60,7 +59,6 @@ img {
   0% { transform: translateY(-40px) rotate(0deg); opacity: 1; }
   100% { transform: translateY(105vh) rotate(360deg); opacity: 0.2; }
 }
-
 
 /* ==========================================
    3. NAVIGASI BAWAH & TOMBOL MUSIK MELAYANG
@@ -109,7 +107,6 @@ img {
   .floating-music { right: 12px; }
 }
 
-
 /* ==========================================
    4. CONTAINER UTAMA BINGKAI HP & HIASAN BUNGA
    ========================================== */
@@ -137,9 +134,8 @@ img {
 .bottom-left { bottom: 0; left: 0; transform: scaleY(-1); }
 .bottom-right { bottom: 0; right: 0; transform: rotate(180deg); }
 
-
 /* ==========================================
-   5. PENGATURAN UMUM SLIDE & SCROLL (BEBAS / MULUS)
+   5. PENGATURAN UMUM SLIDE & SCROLL
    ========================================== */
 .scroll-container {
   width: 100%;
@@ -164,7 +160,6 @@ img {
 }
 
 .slide-title { font-size: 1.8rem; margin-bottom: 8px; }
-
 
 /* ==========================================
    6. SLIDE 1: COVER UTAMA
@@ -257,7 +252,6 @@ img {
   cursor: pointer;
 }
 
-
 /* ==========================================
    7. SLIDE 2: VERSE / AYAT & POLAROID
    ========================================== */
@@ -272,9 +266,8 @@ img {
 .polaroid img { width: 125px; height: 180px; object-fit: cover; }
 .verse-text { font-size: 13px; color: var(--text-dark); line-height: 1.3; margin-top: 8px; max-width: 300px; }
 
-
 /* ==========================================
-   8. SLIDE 3: GROOM & BRIDE (MEMPELAI)
+   8. SLIDE 3: GROOM & BRIDE
    ========================================== */
 .oval-frame {
   width: 150px;
@@ -288,10 +281,10 @@ img {
 .person-name { font-size: 1.3rem; }
 .person-sub, .parents-text { font-size: 13px; color: var(--text-dark); }
 .ig-tag { font-size: 12px; color: var(--green-olive); }
-
+.ig-tag a:hover { text-decoration: underline; opacity: 0.8; }
 
 /* ==========================================
-   9. SLIDE 4: SAVE THE DATE (KALENDER)
+   9. SLIDE 4: SAVE THE DATE
    ========================================== */
 .calendar-card {
   border: 2px solid var(--maroon);
@@ -306,9 +299,8 @@ img {
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; font-size: 12px; color: var(--text-dark); }
 .heart-date { background-color: var(--maroon); color: white; border-radius: 50%; display: inline-block; }
 
-
 /* ==========================================
-   10. SLIDE 5: COUNTDOWN (HITUNG MUNDUR)
+   10. SLIDE 5: COUNTDOWN
    ========================================== */
 .live-calendar-card {
   background: var(--maroon);
@@ -383,9 +375,8 @@ img {
   color: #FAF6ED;
 }
 
-
 /* ==========================================
-   11. SLIDE 6 & 7: LOKASI & PHOTOBOOTH BINGKAI KAMERA
+   11. SLIDE 6 & 7: LOKASI & PHOTOBOOTH
    ========================================== */
 .doodle-card, .media-card {
   border: 2px solid var(--maroon);
@@ -402,7 +393,6 @@ img {
 .map-iframe { width: 100%; height: 100%; border: 0; }
 .btn-olive { background-color: var(--green-olive); color: white; border: none; padding: 6px 14px; border-radius: 10px; font-family: var(--font-handwritten); font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
 
-/* Styling Photobooth */
 .photobooth-section {
   justify-content: flex-start !important;
   padding-top: 20px !important;
@@ -429,7 +419,6 @@ img {
   margin: 0 auto;
 }
 
-/* Bingkai Estetik Ala Polaroid - Rasio 9:16 */
 .cam-box {
   position: relative;
   width: 100% !important;
@@ -444,7 +433,6 @@ img {
   margin: 0 auto;
 }
 
-/* Video & Hasil Foto Menyeluruh Penuh Proporsional di Kotak yang Sama */
 #booth-video, #booth-result {
   position: absolute;
   top: 0;
@@ -456,7 +444,6 @@ img {
   border-radius: 10px;
 }
 
-/* Garis Grid Tipis Ala Kamera HP */
 .camera-grid {
   position: absolute;
   top: 4px;
@@ -496,7 +483,6 @@ img {
 .booth-watermark strong { font-family: 'Poppins', sans-serif; font-size: 12px; display: block; line-height: 1.1; }
 .booth-watermark small { font-size: 8px; opacity: 0.9; }
 
-/* Panel Kontrol Tombol di Bawah */
 .camera-controls {
   display: flex;
   align-items: center;
@@ -548,28 +534,49 @@ img {
   transform: scale(1.08);
 }
 
-
 /* ==========================================
-   12. SLIDE 8: OUR MEMORIES (GALERI FOTO)
+   12. SLIDE 8: OUR MEMORIES (CSS GRID)
    ========================================== */
 #slide-8 { justify-content: flex-start; padding-top: 30px; overflow-y: auto; }
-.gallery-grid { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; max-width: 330px; margin-top: 10px; }
-.grid-item { border-radius: 10px; overflow: hidden; position: relative; z-index: 2; }
-.grid-item.full-width { flex: 1 1 100%; aspect-ratio: 16 / 9; height: auto; }
-.grid-item.portrait { flex: 1 1 calc(50% - 4px); aspect-ratio: 3 / 4; height: auto; }
-.grid-item img { width: 100%; height: 100%; object-fit: cover; object-position: center top; border-radius: 10px; }
-
+.gallery-grid { 
+  display: grid; 
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 10px; 
+  width: 100%; 
+  max-width: 330px; 
+  margin-top: 15px; 
+}
+.grid-item { 
+  border-radius: 10px; 
+  overflow: hidden; 
+  position: relative; 
+  z-index: 2; 
+}
+.grid-item.full-width { 
+  grid-column: span 2; 
+  aspect-ratio: 16 / 9; 
+}
+.grid-item.portrait { 
+  grid-column: span 1; 
+  aspect-ratio: 3 / 4; 
+}
+.grid-item img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  object-position: center top; 
+  display: block; 
+}
 
 /* ==========================================
-   13. SLIDE 9: WISHES / RSVP (FORM KEHADIRAN)
+   13. SLIDE 9: WISHES / RSVP
    ========================================== */
 .rsvp-form { border: 2px solid var(--maroon); padding: 12px; width: 100%; max-width: 320px; text-align: left; background: rgba(250, 246, 237, 0.9); border-radius: 12px; }
 .rsvp-form label { font-size: 10px; color: var(--maroon); display: block; margin-top: 6px; }
 .rsvp-form input, .rsvp-form select, .rsvp-form textarea { width: 100%; padding: 5px; border: 1px solid #ccc; background-color: #FAF6ED; font-family: var(--font-handwritten); font-size: 13px; margin-top: 2px; border-radius: 6px; }
 
-
 /* ==========================================
-   14. SLIDE 10: WEDDING GIFT (KARTU REKENING SEABANK)
+   14. SLIDE 10: WEDDING GIFT & TOMBOL WA
    ========================================== */
 #slide-10 { justify-content: flex-start; padding-top: 25px; padding-bottom: 85px; overflow-y: auto; }
 .atm-card {
@@ -579,7 +586,7 @@ img {
   height: 190px;
   border-radius: 12px;
   padding: 12px;
-  margin: 0 auto 8px;
+  margin: 0 auto 6px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   text-align: left;
   display: flex;
@@ -590,16 +597,45 @@ img {
 }
 
 .seabank-bg { background: linear-gradient(135deg, #fff9ec 0%, #fef3d6 100%); }
-.card-chip { width: 30px; height: 22px; background: linear-gradient(135deg, #f3d078, #d4af37); border-radius: 4px; border: 1px solid #b8972e; }
-.bank-logo-img { position: absolute; top: 12px; right: 15px; width: 60px; height: auto; object-fit: contain; }
+.card-chip { width: 48px; height: 33px; background: linear-gradient(135deg, #f3d078, #d4af37); border-radius: 4px; border: 1px solid #b8972e; }
+.bank-logo-img { position: absolute; top: 12px; right:32px; width: 100px; height: auto; object-fit: contain; }
 .card-details { margin-top: 6px; }
 .holder-name { font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600; color: #2d3748; margin-bottom: 2px; }
 .rekening-num { font-family: 'Poppins', sans-serif; font-size: 12px; letter-spacing: 1px; color: #4a5568; }
 .btn-copy-card { position: absolute; bottom: 10px; right: 12px; background: rgba(0, 0, 0, 0.45); color: #ffffff; border: none; padding: 3px 10px; border-radius: 14px; font-family: 'Poppins', sans-serif; font-size: 10px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
 
+/* Styling Tombol Konfirmasi WA */
+.btn-wa-confirm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: #25D366;
+  color: #ffffff;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 3px 8px rgba(37, 211, 102, 0.25);
+  transition: 0.2s ease;
+  width: 100%;
+  max-width: 400px;
+}
+
+.btn-wa-confirm:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-wa-confirm i {
+  font-size: 14px;
+}
 
 /* ==========================================
-   15. SLIDE 11: THANKS (PENUTUP & SOSMED)
+   15. SLIDE 11: THANKS
    ========================================== */
 .slide-thanks {
   justify-content: center;
@@ -624,7 +660,7 @@ img {
 .thanks-couples {
   font-size: 2.1rem;
   color: var(--maroon);
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 
 .thanks-credits {
@@ -669,9 +705,8 @@ img {
   opacity: 0.8;
 }
 
-
 /* ==========================================
-   16. MODAL POPUP E-ID CARD (KARTU UCAPAN)
+   16. MODAL POPUP E-ID CARD & STATUS UCAPAN
    ========================================== */
 .modal-overlay {
   position: fixed;
@@ -698,8 +733,8 @@ img {
   background: #FAF6ED;
   padding: 16px;
   border-radius: 16px;
-  width: 85%;
-  max-width: 320px;
+  width: 90%;
+  max-width: 330px;
   position: relative;
   text-align: center;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
@@ -727,8 +762,8 @@ img {
 
 .card-header {
   border-bottom: 1px solid rgba(139, 38, 62, 0.2);
-  padding-bottom: 8px;
-  margin-bottom: 10px;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .card-sub {
@@ -744,13 +779,13 @@ img {
 
 .card-guest-info {
   text-align: left;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .info-label {
   font-size: 9px;
   color: var(--text-dark);
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 #card-guest-name {
@@ -762,6 +797,7 @@ img {
 .card-row {
   display: flex;
   justify-content: space-between;
+  margin-top: 4px;
 }
 
 .info-val {
@@ -771,26 +807,68 @@ img {
   color: #333;
 }
 
-.card-qr-box {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(139, 38, 62, 0.2);
-}
-
-.card-qr-box img {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 4px;
-  border-radius: 5px;
-}
-
-.qr-text {
-  font-size: 10px;
-  color: var(--text-dark);
-}
-
-.save-tip {
+.card-footer-text {
   font-size: 11px;
-  color: var(--maroon);
-  margin-top: 10px;
+  color: var(--text-dark);
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+
+.btn-simpan-pass {
+  background-color: var(--maroon);
+  color: #fef3d6;
+  border: none;
+  padding: 6px 16px;
+  font-family: var(--font-handwritten);
+  font-size: 14px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-simpan-pass:hover {
+  opacity: 0.9;
+}
+
+/* ==========================================
+   17. ANIMASI SCROLL MASUK KIRI & KANAN (HALUS & SESUAI POSISI)
+   ========================================== */
+.animate-left {
+  opacity: 0;
+  transform: translateX(-70px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-right {
+  opacity: 0;
+  transform: translateX(70px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-left.active, .animate-right.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.floral-corner, .gift-doodle, .flower-doodle, .camera-doodle {
+  animation: float 4s ease-in-out infinite;
+}
+
+.floating-music {
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.floating-music.playing {
+  animation: spinMusic 3s linear infinite;
+}
+
+@keyframes spinMusic {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
