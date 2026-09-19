@@ -89,7 +89,7 @@ function createHeart() {
 setInterval(createHeart, 350);
 
 // ==========================================
-// 4. FITUR PHOTOBOOTH, KAMERA & GOOGLE DRIVE
+// 4. FITUR PHOTOBOOTH & KAMERA
 // ==========================================
 let mediaStream = null;
 let useFrontCamera = true;
@@ -263,11 +263,12 @@ function handleRSVP(event) {
   const guests = guestsInput ? guestsInput.value : "1 Orang";
   const message = messageInput ? messageInput.value : "";
 
-  // Kirim data ke FormSubmit secara background agar masuk ke Gmail
+  // Kirim data secara background ke FormSubmit agar langsung masuk Gmail
   const formData = new FormData(form);
-  fetch("https://formsubmit.co/ajax/rizqi.ridwan25@gmail.com", {
+  fetch(form.action, {
     method: 'POST',
-    body: formData
+    body: formData,
+    headers: { 'Accept': 'json' }
   }).catch(error => console.error("Error FormSubmit:", error));
 
   // Tampilkan E-ID Card (Wedding Pass) ke Tamu
