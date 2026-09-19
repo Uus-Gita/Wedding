@@ -247,11 +247,12 @@ function retakePhoto() {
 }
 
 // ==========================================
-// 5. RSVP & E-ID CARD (KIRIM KE EMAIL & MODAL)
+// 5. RSVP & E-ID CARD (MENGGUNAKAN FORMSUBMIT)
 // ==========================================
 function handleRSVP(event) {
   event.preventDefault();
   
+  const form = event.target;
   const nameInput = document.getElementById('rsvp-name');
   const attendanceInput = document.getElementById('rsvp-attendance');
   const guestsInput = document.getElementById('rsvp-guests');
@@ -262,20 +263,14 @@ function handleRSVP(event) {
   const guests = guestsInput ? guestsInput.value : "1 Orang";
   const message = messageInput ? messageInput.value : "";
 
-  if (GOOGLE_DRIVE_WEB_APP_URL && !GOOGLE_DRIVE_WEB_APP_URL.includes("URL_WEB_APP")) {
-    const rsvpData = new URLSearchParams({
-      name: name,
-      attendance: attendance,
-      guests: guests,
-      message: message
-    });
+  // Kirim data ke FormSubmit secara background agar masuk ke Gmail
+  const formData = new FormData(form);
+  fetch("https://formsubmit.co/ajax/rizqi.ridwan25@gmail.com", {
+    method: 'POST',
+    body: formData
+  }).catch(error => console.error("Error FormSubmit:", error));
 
-    fetch(GOOGLE_DRIVE_WEB_APP_URL, {
-      method: 'POST',
-      body: rsvpData
-    }).catch(error => console.error("Error RSVP:", error));
-  }
-
+  // Tampilkan E-ID Card (Wedding Pass) ke Tamu
   const nameEl = document.getElementById('card-guest-name');
   const countEl = document.getElementById('card-guest-count');
   const statusEl = document.getElementById('card-attendance-status');
@@ -289,8 +284,7 @@ function handleRSVP(event) {
   const modalEl = document.getElementById('idcard-modal');
   if (modalEl) modalEl.classList.add('active');
   
-  const formEl = document.getElementById('rsvp-form');
-  if (formEl) formEl.reset();
+  form.reset();
 }
 
 function closeModal() {
@@ -344,7 +338,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// 7. INTERSECTION OBSERVER UNTUK ANIMASI KIRI & KANAN (TIDAK SILANG)
+// 7. INTERSECTION OBSERVER UNTUK ANIMASI KIRI & KANAN
 // ==========================================
 document.addEventListener("DOMContentLoaded", function() {
   const leftElements = document.querySelectorAll('.slide-title, .calendar-card, .rsvp-form, .thanks-opening, .polaroid-wrapper .polaroid:nth-child(1)');
