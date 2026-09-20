@@ -177,7 +177,14 @@ function capturePhoto() {
     sY = (vHeight - sHeight) / 2;
   }
 
+  // FLIP KANVAS SUPAYA POSISI TIDAK TERBALIK (REAL SESUAI ASLINYA)
+  ctx.save();
+  ctx.translate(canvas.width, 0);
+  ctx.scale(-1, 1);
+
   ctx.drawImage(video, sX, sY, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+  
+  ctx.restore();
 
   const templateImg = new Image();
   templateImg.src = 'Galery/booth.jpg'; 
