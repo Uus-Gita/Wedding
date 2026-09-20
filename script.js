@@ -89,7 +89,7 @@ function createHeart() {
 setInterval(createHeart, 350);
 
 // ==========================================
-// 4. FITUR PHOTOBOOTH & GOOGLE APPS SCRIPT
+// 4. FITUR PHOTOBOOTH (PREVIEW VIDEO DENGAN BINGKAI & FOTO)
 // ==========================================
 let mediaStream = null;
 let useFrontCamera = true;
@@ -103,6 +103,7 @@ async function startCamera() {
   const video = document.getElementById('booth-video');
   const resultImg = document.getElementById('booth-result');
   const frameOverlay = document.getElementById('cam-frame-overlay');
+  const videoPlayer = document.getElementById('booth-video-player');
   
   const btnStart = document.getElementById('btn-start-cam');
   const btnSwitch = document.getElementById('btn-switch-cam');
@@ -114,6 +115,8 @@ async function startCamera() {
 
   isRecording = false;
   if (window.videoRecordTimer) clearInterval(window.videoRecordTimer);
+
+  if (videoPlayer) videoPlayer.style.display = 'none';
 
   try {
     if (mediaStream) {
@@ -237,6 +240,8 @@ function capturePhoto() {
 function recordVideo() {
   const video = document.getElementById('booth-video');
   const frameOverlay = document.getElementById('cam-frame-overlay');
+  const resultImg = document.getElementById('booth-result');
+  
   const btnSwitch = document.getElementById('btn-switch-cam');
   const btnCapture = document.getElementById('btn-capture');
   const btnRecord = document.getElementById('btn-record-video');
@@ -250,11 +255,18 @@ function recordVideo() {
   if (!isRecording) {
     recordedChunks = [];
     
+    let mimeType = 'video/webm; codecs=vp9';
+    if (MediaRecorder.isTypeSupported('video/mp4')) {
+      mimeType = 'video/mp4';
+    } else if (MediaRecorder.isTypeSupported('video/webm; codecs=vp8')) {
+      mimeType = 'video/webm; codecs=vp8';
+    }
+
     try {
-      mediaRecorder = new MediaRecorder(mediaStream, { mimeType: 'video/webm; codecs=vp9' });
+      mediaRecorder = new MediaRecorder(mediaStream, { mimeType: mimeType });
     } catch (e) {
       try {
-        mediaRecorder = new MediaRecorder(mediaStream, { mimeType: 'video/mp4' });
+        mediaRecorder = new MediaRecorder(mediaStream);
       } catch (err) {
         alert("Browser HP kamu tidak mendukung perekaman video langsung.");
         return;
@@ -268,7 +280,7 @@ function recordVideo() {
     };
 
     mediaRecorder.onstop = function() {
-      const blob = new Blob(recordedChunks, { type: 'video/mp4' });
+      const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType || 'video/mp4' });
       const videoURL = URL.createObjectURL(blob);
 
       const reader = new FileReader();
@@ -277,6 +289,32 @@ function recordVideo() {
         const base64Video = reader.result;
         uploadVideoToGoogleDrive(base64Video);
       };
+
+      // Tampilkan Pemutar Video Pratinjau Tepat di Dalam Kotak Bingkai Photobooth
+      if (resultImg) resultImg.style.display = 'none';
+      
+      let videoPlayer = document.getElementById('booth-video-player');
+      if (!videoPlayer) {
+        videoPlayer = document.createElement('video');
+        videoPlayer.id = 'booth-video-player';
+        videoPlayer.controls = true;
+        videoPlayer.autoplay = true;
+        videoPlayer.playsInline = true;
+        videoPlayer.style.position = 'absolute';
+        videoPlayer.style.top = '0';
+        videoPlayer.style.left = '0';
+        videoPlayer.style.width = '100%';
+        videoPlayer.style.height = '100%';
+        videoPlayer.style.objectFit = 'cover';
+        videoPlayer.style.borderRadius = '10px';
+        videoPlayer.style.zIndex = '4'; // Berada di bawah bingkai overlay
+        video.parentNode.appendChild(videoPlayer);
+      }
+      videoPlayer.src = videoURL;
+      videoPlayer.style.display = 'block';
+
+      // Pastikan bingkai transparan (Galery/booth.png) tetap tampil di atas video saat review
+      if (frameOverlay) frameOverlay.style.display = 'block';
 
       downloadBtn.href = videoURL;
       downloadBtn.download = `Video-Photobooth-UusGita.mp4`;
@@ -287,10 +325,9 @@ function recordVideo() {
         mediaStream.getTracks().forEach(track => track.stop());
       }
       video.style.display = 'none';
-      if (frameOverlay) frameOverlay.style.display = 'none';
     };
 
-    mediaRecorder.start();
+    mediaRecorder.start(250);
     isRecording = true;
 
     if (btnSwitch) btnSwitch.style.display = 'none';
@@ -356,6 +393,14 @@ function uploadVideoToGoogleDrive(base64Video) {
 }
 
 function retakePhoto() {
+  isRecording = false;
+  if (window.videoRecordTimer) clearInterval(window.videoRecordTimer);
+  
+  const videoPlayer = document.getElementById('booth-video-player');
+  if (videoPlayer) {
+    videoPlayer.style.display = 'none';
+  }
+  
   startCamera();
 }
 
