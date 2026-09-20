@@ -1,4 +1,15 @@
 // ==========================================
+// 0. KONFIGURASI SUPABASE (DARI DASHBOARD)
+// ==========================================
+const SUPABASE_URL = "https://osdgyhbvesbwlvfipyfo.supabase.co";
+const SUPABASE_ANON_KEY = "MASUKKAN_PUBLISHABLE_KEY_DISINI"; // Ganti dengan sb_publishable_... milikmu[cite: 15]
+
+// Inisialisasi Supabase Client
+const { createClient } = supabase;
+const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+
+// ==========================================
 // 1. PENGATURAN UTAMA & MUSIK
 // ==========================================
 function openInvitation() {
@@ -89,16 +100,13 @@ function createHeart() {
 setInterval(createHeart, 350);
 
 // ==========================================
-// 4. FITUR PHOTOBOOTH & GOOGLE APPS SCRIPT
+// 4. FITUR PHOTOBOOTH (SUPABASE STORAGE)
 // ==========================================
 let mediaStream = null;
 let useFrontCamera = true;
 let mediaRecorder;
 let recordedChunks = [];
 let isRecording = false;
-
-// ⚠️ Pastikan URL Web App Google Apps Script kamu sudah terpasang di sini
-const GOOGLE_DRIVE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwnQLrYcmK6prPRuLl-PKkAJjAhtliTcVLuVqrfamqNbqxhcj5_ghkcXIp5_I1D9ppi/exec";
 
 async function startCamera() {
   const video = document.getElementById('booth-video');
@@ -128,7 +136,7 @@ async function startCamera() {
       video: { 
         facingMode: useFrontCamera ? 'user' : 'environment'
       },
-      audio: true // Diaktifkan agar suara ikut terekam saat rekam video
+      audio: true 
     };
 
     mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -204,7 +212,7 @@ function capturePhoto() {
     downloadBtn.href = dataURL;
     downloadBtn.download = `Photobooth-UusGita.png`;
 
-    uploadPhotoToGoogleDrive(dataURL);
+    uploadPhotoToSupabase(dataURL);
   };
 
   if (mediaStream) {
@@ -272,7 +280,7 @@ function recordVideo() {
       reader.readAsDataURL(blob);
       reader.onloadend = function() {
         const base64Video = reader.result;
-        uploadVideoToGoogleDrive(base64Video);
+        uploadVideoToSupabase(base64Video);
       };
 
       if (resultImg) resultImg.style.display = 'none';
@@ -346,40 +354,50 @@ function recordVideo() {
   }
 }
 
-function uploadPhotoToGoogleDrive(base64Image) {
-  if (!GOOGLE_DRIVE_WEB_APP_URL || GOOGLE_DRIVE_WEB_APP_URL.includes("URL_WEB_APP")) return;
+// Fungsi Upload Foto ke Supabase Storage (Bucket: FotoBooth)
+async function uploadPhotoToSupabase(base64Image) {
+  try {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const fileName = `Photobooth-UusGita-${timestamp}.png`;
 
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const fileName = `Photobooth-UusGita-${timestamp}.png`;
+    const response = await fetch(base64Image);
+    const blob = await response.blob();
 
-  const photoData = {
-    file: base64Image,
-    filename: fileName
-  };
+    const { data, error } = await _supabase.storage
+      .from('FotoBooth')
+      .upload(fileName, blob, { contentType: 'image/png' });
 
-  fetch(GOOGLE_DRIVE_WEB_APP_URL, {
-    method: 'POST',
-    body: JSON.stringify(photoData),
-    headers: { 'Content-Type': 'application/json' }
-  }).catch(error => console.error("Error Upload Foto:", error));
+    if (error) {
+      console.error("Gagal Upload Foto ke Supabase:", error.message);
+    } else {
+      console.log("Foto Berhasil Diupload:", data);
+    }
+  } catch (err) {
+    console.error("Error Upload Foto:", err);
+  }
 }
 
-function uploadVideoToGoogleDrive(base64Video) {
-  if (!GOOGLE_DRIVE_WEB_APP_URL || GOOGLE_DRIVE_WEB_APP_URL.includes("URL_WEB_APP")) return;
+// Fungsi Upload Video ke Supabase Storage (Bucket: FotoBooth)
+async function uploadVideoToSupabase(base64Video) {
+  try {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const fileName = `Video-UusGita-${timestamp}.mp4`;
 
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const fileName = `Video-UusGita-${timestamp}.mp4`;
+    const response = await fetch(base64Video);
+    const blob = await response.blob();
 
-  const videoData = {
-    file: base64Video,
-    filename: fileName
-  };
+    const { data, error } = await _supabase.storage
+      .from('FotoBooth')
+      .upload(fileName, blob, { contentType: 'video/mp4' });
 
-  fetch(GOOGLE_DRIVE_WEB_APP_URL, {
-    method: 'POST',
-    body: JSON.stringify(videoData),
-    headers: { 'Content-Type': 'application/json' }
-  }).catch(error => console.error("Error Upload Video:", error));
+    if (error) {
+      console.error("Gagal Upload Video ke Supabase:", error.message);
+    } else {
+      console.log("Video Berhasil Diupload:", data);
+    }
+  } catch (err) {
+    console.error("Error Upload Video:", err);
+  }
 }
 
 function retakePhoto() {
@@ -394,10 +412,11 @@ function retakePhoto() {
   startCamera();
 }
 
+
 // ==========================================
-// 5. RSVP & E-ID CARD
+// 5. RSVP & E-ID CARD (SUPABASE DATABASE)
 // ==========================================
-function handleRSVP(event) {
+async function handleRSVP(event) {
   event.preventDefault();
   
   const nameInput = document.getElementById('rsvp-name');
@@ -410,21 +429,25 @@ function handleRSVP(event) {
   const guests = guestsInput ? guestsInput.value : "1 Orang";
   const message = messageInput ? messageInput.value : "";
 
-  const rsvpData = {
-    name: name,
-    attendance: attendance,
-    guests: guests,
-    message: message
-  };
+  // Kirim data ke Tabel Supabase: rsvp_guests
+  const { data, error } = await _supabase
+    .from('rsvp_guests')
+    .insert([{ 
+      name: name, 
+      attendance: attendance, 
+      guests: guests, 
+      message: message 
+    }]);
 
-  if (GOOGLE_DRIVE_WEB_APP_URL && !GOOGLE_DRIVE_WEB_APP_URL.includes("URL_WEB_APP")) {
-    fetch(GOOGLE_DRIVE_WEB_APP_URL, {
-      method: 'POST',
-      body: JSON.stringify(rsvpData),
-      headers: { 'Content-Type': 'application/json' }
-    }).catch(error => console.error("Error RSVP:", error));
+  if (error) {
+    console.error("Gagal menyimpan RSVP:", error.message);
+    alert("Gagal mengirim RSVP. Silakan coba lagi.");
+    return;
+  } else {
+    console.log("RSVP berhasil disimpan:", data);
   }
 
+  // Tampilkan data ke E-ID Card secara instan
   const nameEl = document.getElementById('card-guest-name');
   const countEl = document.getElementById('card-guest-count');
   const statusEl = document.getElementById('card-attendance-status');
@@ -446,6 +469,7 @@ function closeModal() {
   const modalEl = document.getElementById('idcard-modal');
   if (modalEl) modalEl.classList.remove('active');
 }
+
 
 // ==========================================
 // 6. INISIALISASI URL & NAVIGASI
@@ -491,6 +515,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
 
 // ==========================================
 // 7. INTERSECTION OBSERVER UNTUK ANIMASI
@@ -545,6 +570,7 @@ document.addEventListener("DOMContentLoaded", function() {
     observer.observe(el);
   });
 });
+
 
 // ==========================================
 // 8. GOOGLE CALENDAR
