@@ -97,7 +97,7 @@ let mediaRecorder;
 let recordedChunks = [];
 let isRecording = false;
 
-const GOOGLE_DRIVE_WEB_APP_URL = "SALIN_URL_WEB_APP_GAS_BARU_DISINI";
+const GOOGLE_DRIVE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbztB7dCANIVbL53y9LZLmP-OhKaxlasLVCoV7atR9K0NlbcyxCxfOp7lwQpFtY468KZ/exec";
 
 async function startCamera() {
   const video = document.getElementById('booth-video');
