@@ -94,8 +94,8 @@ setInterval(createHeart, 350);
 let mediaStream = null;
 let useFrontCamera = true;
 
-// ⚠️ PASTIKAN URL INI DIISI DENGAN URL WEB APP GOOGLE APPS SCRIPT KAMU
-const GOOGLE_DRIVE_WEB_APP_URL = "SALIN_URL_WEB_APP_GAS_BARU_DISINI";
+// ⚠️ Pastikan URL Web App Google Apps Script kamu dipasang di sini
+const GOOGLE_DRIVE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwEylglQKf2t8tu1l-JBy16TY7PQbkRx-2MI4KMKJSBOonkiXrHX75bPM6NXxh11TrQ/exec";
 
 async function startCamera() {
   const video = document.getElementById('booth-video');
@@ -157,6 +157,7 @@ function capturePhoto() {
 
   if (!video.srcObject) return;
 
+  // Ukuran kanvas proporsional 1:1 agar tidak gepeng
   canvas.width = 1000;
   canvas.height = 1000; 
   const ctx = canvas.getContext('2d');
@@ -164,28 +165,21 @@ function capturePhoto() {
   const vWidth = video.videoWidth;
   const vHeight = video.videoHeight;
   let sWidth, sHeight, sX, sY;
-  const aspectRatio = 1;
 
   if (vWidth > vHeight) {
     sHeight = vHeight;
-    sWidth = vHeight * aspectRatio;
+    sWidth = vHeight;
     sX = (vWidth - sWidth) / 2;
     sY = 0;
   } else {
     sWidth = vWidth;
-    sHeight = vWidth / aspectRatio;
+    sHeight = vWidth;
     sX = 0;
     sY = (vHeight - sHeight) / 2;
   }
 
-  // FLIP KANVAS SUPAYA POSISI TIDAK TERBALIK (REAL SESUAI ASLINYA)
-  ctx.save();
-  ctx.translate(canvas.width, 0);
-  ctx.scale(-1, 1);
-
-  ctx.drawImage(video, sX, sY, sWidth, sHeight, 50, 50, canvas.width - 100, canvas.height - 100);
-  
-  ctx.restore();
+  // GAMBAR VIDEO KE KANVAS (POSISI NORMAL TIDAK TERJUNGKIR)
+  ctx.drawImage(video, sX, sY, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
 
   const templateImg = new Image();
   templateImg.src = 'Galery/booth.jpg'; 
@@ -272,7 +266,6 @@ function handleRSVP(event) {
   const guests = guestsInput ? guestsInput.value : "1 Orang";
   const message = messageInput ? messageInput.value : "";
 
-  // Kirim data ke Google Apps Script (masuk Gmail & Drive)
   const rsvpData = {
     name: name,
     attendance: attendance,
@@ -288,7 +281,6 @@ function handleRSVP(event) {
     }).catch(error => console.error("Error RSVP:", error));
   }
 
-  // Tampilkan E-ID Card (Wedding Pass) ke Tamu di Layar
   const nameEl = document.getElementById('card-guest-name');
   const countEl = document.getElementById('card-guest-count');
   const statusEl = document.getElementById('card-attendance-status');
