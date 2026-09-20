@@ -405,7 +405,7 @@ img {
   padding: 15px 12px;
   border-radius: 20px;
   width: 100% !important;
-  max-width: 300px !important;
+  max-width: 350px !important;
   margin: 0 auto;
   border: 2px solid var(--maroon);
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
@@ -415,7 +415,7 @@ img {
 .booth-container {
   position: relative;
   width: 100% !important;
-  max-width: 250px !important;
+  max-width: 300px !important;
   margin: 0 auto;
 }
 
@@ -423,7 +423,7 @@ img {
 .cam-box {
   position: relative;
   width: 100% !important;
-  max-width: 250px !important;
+  max-width: 350px !important;
   aspect-ratio: 3 / 4 !important; 
   background: #000000;
   border: 6px solid #FAF6ED !important;
