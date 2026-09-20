@@ -98,7 +98,7 @@ let recordedChunks = [];
 let isRecording = false;
 
 // ⚠️ Pastikan URL Web App Google Apps Script kamu sudah terpasang di sini
-const GOOGLE_DRIVE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbznezTT3Kf2H9EOQsjZuwnfu-1OHYLiZLPlMHvdS__5gwzaZm61SXAvQxcL-Lt7yZ8k/exec";
+const GOOGLE_DRIVE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwcS5O9YlcmpCFdflUuWDdSHhnKwk3gfju6q0ajln1AP5vzujb0jKK2uO77TOL0gSXa/exec";
 
 async function startCamera() {
   const video = document.getElementById('booth-video');
