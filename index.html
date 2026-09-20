@@ -13,6 +13,9 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <!-- 🚀 Library Supabase Client (Wajib ada sebelum script.js) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <!-- File CSS Utama -->
   <link rel="stylesheet" href="style.css?v=26">
 </head>
@@ -225,7 +228,7 @@
         </div>
       </section>
 
-      <!-- SLIDE 7: Live Photo Booth (Foto & Video Bebas Start/Stop + Bingkai Live) -->
+      <!-- SLIDE 7: Live Photo Booth -->
       <section id="slide-7" class="full-slide photobooth-section">
         <div class="camera-doodle animate-left">📸</div>
         <h2 class="slide-title animate-left">Wedding Photobooth</h2>
@@ -268,7 +271,6 @@
             <button id="btn-capture" class="btn-action" onclick="capturePhoto()" style="display:none; background-color: var(--maroon); color: #fff;">
               📸 Foto
             </button>
-            <!-- Tombol Rekam Video Bebas (Start/Stop) -->
             <button id="btn-record-video" class="btn-action" onclick="recordVideo()" style="display:none; background-color: #8B0000; color: #fff;">
               🎥 Video
             </button>
@@ -304,17 +306,12 @@
         </div>
       </section>
 
-      <!-- SLIDE 9: Wishes / RSVP (FormSubmit Terintegrasi ke Email Anda) -->
+      <!-- SLIDE 9: Wishes / RSVP (Supabase Integration) -->
       <section id="slide-9" class="full-slide">
         <h2 class="slide-title animate-left">Wishes</h2>
         <p class="sub-text animate-right">Konfirmasi Kehadiran & Kirim Ucapan Harapan.</p>
 
-        <form class="rsvp-form animate-left" id="rsvp-form" action="https://formsubmit.co/sante4189@gmail.com" method="POST" onsubmit="handleRSVP(event)">
-          <!-- Pengaturan FormSubmit -->
-          <input type="hidden" name="_subject" value="✨ Wedding Pass & RSVP Baru dari Tamu Undangan!">
-          <input type="hidden" name="_template" value="box">
-          <input type="hidden" name="_captcha" value="false">
-
+        <form class="rsvp-form animate-left" id="rsvp-form" onsubmit="handleRSVP(event)">
           <label>Nama Lengkap</label>
           <input type="text" name="Nama_Lengkap" id="rsvp-name" placeholder="Nama Kamu" required>
 
@@ -337,7 +334,7 @@
         </form>
       </section>
 
-      <!-- SLIDE 10: Wedding Gift (SeaBank) + Tombol WA -->
+      <!-- SLIDE 10: Wedding Gift (SeaBank) -->
       <section id="slide-10" class="full-slide">
         <div class="gift-doodle animate-left">🎁</div>
         <h2 class="slide-title animate-left">Wedding Gift</h2>
@@ -405,7 +402,7 @@
     </div>
   </main>
 
-  <!-- MODAL POPUP E-ID CARD / WEDDING PASS (Tema Maroon Garis Putus-Putus Sesuai Keinginan Anda) -->
+  <!-- MODAL POPUP E-ID CARD / WEDDING PASS -->
   <div id="idcard-modal" class="modal-overlay">
     <div class="modal-content">
       <button class="close-modal" onclick="closeModal()">&times;</button>
@@ -448,6 +445,7 @@
     </div>
   </div>
 
+  <!-- File JavaScript Utama -->
   <script src="script.js"></script>
 </body>
 </html>
