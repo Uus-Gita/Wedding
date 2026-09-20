@@ -443,7 +443,7 @@ img {
   object-fit: cover !important;
   display: block;
   border-radius: 10px;
-  transform: scaleX(-1); /* Membalikkan video preview agar tidak mirror di layar HP */
+  transform: scaleX(1); /* Membalikkan video preview agar tidak mirror di layar HP */
 }
 
 /* Jika foto sudah jadi, matikan efek flip-nya */
