@@ -376,7 +376,7 @@ img {
 }
 
 /* ==========================================
-   11. SLIDE 6 & 7: LOKASI & PHOTOBOOTH
+   11. SLIDE 6 & 7: LOKASI & PHOTOBOOTH (RASIO 4:3 VERTIKAL)
    ========================================== */
 .doodle-card, .media-card {
   border: 2px solid var(--maroon);
@@ -419,11 +419,12 @@ img {
   margin: 0 auto;
 }
 
+/* DIUBAH MENJADI RASIO 4:3 (3/4) AGAR LEBIH LUAS DAN PAS */
 .cam-box {
   position: relative;
   width: 100% !important;
   max-width: 250px !important;
-  aspect-ratio: 9 / 16 !important;
+  aspect-ratio: 3 / 4 !important; 
   background: #000000;
   border: 6px solid #FAF6ED !important;
   border-radius: 16px !important;
@@ -442,6 +443,12 @@ img {
   object-fit: cover !important;
   display: block;
   border-radius: 10px;
+  transform: scaleX(-1); /* Membalikkan video preview agar tidak mirror di layar HP */
+}
+
+/* Jika foto sudah jadi, matikan efek flip-nya */
+#booth-result {
+  transform: none !important;
 }
 
 .camera-grid {
