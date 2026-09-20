@@ -89,7 +89,7 @@ function createHeart() {
 setInterval(createHeart, 350);
 
 // ==========================================
-// 4. FITUR PHOTOBOOTH (PREVIEW VIDEO DENGAN BINGKAI & FOTO)
+// 4. FITUR PHOTOBOOTH & GOOGLE APPS SCRIPT
 // ==========================================
 let mediaStream = null;
 let useFrontCamera = true;
@@ -97,7 +97,7 @@ let mediaRecorder;
 let recordedChunks = [];
 let isRecording = false;
 
-const GOOGLE_DRIVE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbztB7dCANIVbL53y9LZLmP-OhKaxlasLVCoV7atR9K0NlbcyxCxfOp7lwQpFtY468KZ/exec";
+const GOOGLE_DRIVE_WEB_APP_URL = "SALIN_URL_WEB_APP_GAS_BARU_DISINI";
 
 async function startCamera() {
   const video = document.getElementById('booth-video');
@@ -127,7 +127,7 @@ async function startCamera() {
       video: { 
         facingMode: useFrontCamera ? 'user' : 'environment'
       },
-      audio: false
+      audio: true // Diaktifkan agar suara ikut terekam
     };
 
     mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -180,32 +180,17 @@ function capturePhoto() {
 
   if (!video.srcObject) return;
 
-  canvas.width = 1000;
-  canvas.height = 1000; 
+  // Menggunakan resolusi asli video agar tidak zoom berlebihan
+  canvas.width = video.videoWidth || 720;
+  canvas.height = video.videoHeight || 1280; 
   const ctx = canvas.getContext('2d');
-
-  const vWidth = video.videoWidth;
-  const vHeight = video.videoHeight;
-  let sWidth, sHeight, sX, sY;
-
-  if (vWidth > vHeight) {
-    sHeight = vHeight;
-    sWidth = vHeight;
-    sX = (vWidth - sWidth) / 2;
-    sY = 0;
-  } else {
-    sWidth = vWidth;
-    sHeight = vWidth;
-    sX = 0;
-    sY = (vHeight - sHeight) / 2;
-  }
 
   ctx.save();
   if (useFrontCamera) {
     ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
   }
-  ctx.drawImage(video, sX, sY, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   ctx.restore();
 
   const templateImg = new Image();
@@ -290,7 +275,6 @@ function recordVideo() {
         uploadVideoToGoogleDrive(base64Video);
       };
 
-      // Tampilkan Pemutar Video Pratinjau Tepat di Dalam Kotak Bingkai Photobooth
       if (resultImg) resultImg.style.display = 'none';
       
       let videoPlayer = document.getElementById('booth-video-player');
@@ -307,13 +291,20 @@ function recordVideo() {
         videoPlayer.style.height = '100%';
         videoPlayer.style.objectFit = 'cover';
         videoPlayer.style.borderRadius = '10px';
-        videoPlayer.style.zIndex = '4'; // Berada di bawah bingkai overlay
+        videoPlayer.style.zIndex = '4';
         video.parentNode.appendChild(videoPlayer);
       }
+
+      // Mengatasi mirror pada video review agar gerakan kanan-kiri normal
+      if (useFrontCamera) {
+        videoPlayer.style.transform = 'scaleX(-1)';
+      } else {
+        videoPlayer.style.transform = 'scaleX(1)';
+      }
+
       videoPlayer.src = videoURL;
       videoPlayer.style.display = 'block';
 
-      // Pastikan bingkai transparan (Galery/booth.png) tetap tampil di atas video saat review
       if (frameOverlay) frameOverlay.style.display = 'block';
 
       downloadBtn.href = videoURL;
