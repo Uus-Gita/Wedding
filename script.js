@@ -94,7 +94,7 @@ setInterval(createHeart, 350);
 let mediaStream = null;
 let useFrontCamera = true;
 
-// ⚠️ Ganti URL di bawah ini dengan Web App URL terbaru dari Google Apps Script akun kamu
+// ⚠️ PASTIKAN URL INI DIISI DENGAN URL WEB APP GOOGLE APPS SCRIPT KAMU
 const GOOGLE_DRIVE_WEB_APP_URL = "SALIN_URL_WEB_APP_GAS_BARU_DISINI";
 
 async function startCamera() {
@@ -164,15 +164,16 @@ function capturePhoto() {
   const vWidth = video.videoWidth;
   const vHeight = video.videoHeight;
   let sWidth, sHeight, sX, sY;
-  
+  const aspectRatio = 1;
+
   if (vWidth > vHeight) {
     sHeight = vHeight;
-    sWidth = vHeight;
+    sWidth = vHeight * aspectRatio;
     sX = (vWidth - sWidth) / 2;
     sY = 0;
   } else {
     sWidth = vWidth;
-    sHeight = vWidth;
+    sHeight = vWidth / aspectRatio;
     sX = 0;
     sY = (vHeight - sHeight) / 2;
   }
@@ -182,7 +183,7 @@ function capturePhoto() {
   ctx.translate(canvas.width, 0);
   ctx.scale(-1, 1);
 
-  ctx.drawImage(video, sX, sY, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+  ctx.drawImage(video, sX, sY, sWidth, sHeight, 50, 50, canvas.width - 100, canvas.height - 100);
   
   ctx.restore();
 
