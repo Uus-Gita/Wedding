@@ -157,7 +157,6 @@ function capturePhoto() {
 
   if (!video.srcObject) return;
 
-  // Ukuran kanvas proporsional 1:1 agar tidak gepeng
   canvas.width = 1000;
   canvas.height = 1000; 
   const ctx = canvas.getContext('2d');
@@ -178,34 +177,19 @@ function capturePhoto() {
     sY = (vHeight - sHeight) / 2;
   }
 
-  // GAMBAR VIDEO KE KANVAS (POSISI NORMAL TIDAK TERJUNGKIR)
+  // 1. GAMBAR VIDEO KAMERA DENGAN EFEK MIRROR
+  ctx.save();
+  ctx.translate(canvas.width, 0);
+  ctx.scale(-1, 1);
   ctx.drawImage(video, sX, sY, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+  ctx.restore();
 
+  // 2. TIMPA DENGAN BINGKAI PNG TRANSPARAN
   const templateImg = new Image();
-  templateImg.src = 'Galery/booth.jpg'; 
+  templateImg.src = 'Galery/booth.png'; // Menyesuaikan dengan format .png baru kamu
   
   templateImg.onload = function() {
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = canvas.width;
-    tempCanvas.height = canvas.height;
-    const tempCtx = tempCanvas.getContext('2d');
-    
-    tempCtx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
-    const imgData = tempCtx.getImageData(0, 0, canvas.width, canvas.height);
-    const pixels = imgData.data;
-
-    for (let i = 0; i < pixels.length; i += 4) {
-      let red = pixels[i];
-      let green = pixels[i + 1];
-      let blue = pixels[i + 2];
-
-      if (green > 90 && green > red + 30 && green > blue + 30) {
-        pixels[i + 3] = 0; // Transparan
-      }
-    }
-
-    tempCtx.putImageData(imgData, 0, 0);
-    ctx.drawImage(tempCanvas, 0, 0);
+    ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
 
     const dataURL = canvas.toDataURL('image/png');
     resultImg.src = dataURL;
