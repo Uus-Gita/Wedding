@@ -89,24 +89,31 @@ function createHeart() {
 setInterval(createHeart, 350);
 
 // ==========================================
-// 4. FITUR PHOTOBOOTH & GOOGLE APPS SCRIPT URL
+// 4. FITUR PHOTOBOOTH & GOOGLE APPS SCRIPT
 // ==========================================
 let mediaStream = null;
 let useFrontCamera = true;
+let mediaRecorder;
+let recordedChunks = [];
+let isRecording = false;
 
-// ⚠️ Pastikan URL Web App Google Apps Script kamu dipasang di sini
-const GOOGLE_DRIVE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbztB7dCANIVbL53y9LZLmP-OhKaxlasLVCoV7atR9K0NlbcyxCxfOp7lwQpFtY468KZ/exec";
+const GOOGLE_DRIVE_WEB_APP_URL = "SALIN_URL_WEB_APP_GAS_BARU_DISINI";
 
 async function startCamera() {
   const video = document.getElementById('booth-video');
   const resultImg = document.getElementById('booth-result');
-  const watermark = document.querySelector('.booth-watermark');
+  const frameOverlay = document.getElementById('cam-frame-overlay');
   
   const btnStart = document.getElementById('btn-start-cam');
   const btnSwitch = document.getElementById('btn-switch-cam');
   const btnCapture = document.getElementById('btn-capture');
+  const btnRecord = document.getElementById('btn-record-video');
   const btnRetake = document.getElementById('btn-retake');
   const btnDownload = document.getElementById('btn-download-photo');
+  const timerDiv = document.getElementById('video-timer');
+
+  isRecording = false;
+  if (window.videoRecordTimer) clearInterval(window.videoRecordTimer);
 
   try {
     if (mediaStream) {
@@ -123,13 +130,25 @@ async function startCamera() {
     mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
     video.srcObject = mediaStream;
     
+    if (useFrontCamera) {
+      video.style.transform = 'scaleX(-1)';
+    } else {
+      video.style.transform = 'scaleX(1)';
+    }
+
     video.style.display = 'block';
-    if (watermark) watermark.style.display = 'block';
+    if (frameOverlay) frameOverlay.style.display = 'block';
     if (resultImg) resultImg.style.display = 'none';
+    if (timerDiv) timerDiv.style.display = 'none';
 
     if (btnStart) btnStart.style.display = 'none';
     if (btnSwitch) btnSwitch.style.display = 'flex';
     if (btnCapture) btnCapture.style.display = 'flex';
+    if (btnRecord) {
+      btnRecord.style.display = 'inline-flex';
+      btnRecord.innerHTML = '🎥 Video (Bebas)';
+      btnRecord.style.backgroundColor = '#8B0000';
+    }
     if (btnRetake) btnRetake.style.display = 'none';
     if (btnDownload) btnDownload.style.display = 'none';
 
@@ -148,10 +167,11 @@ function capturePhoto() {
   const video = document.getElementById('booth-video');
   const canvas = document.getElementById('booth-canvas');
   const resultImg = document.getElementById('booth-result');
-  const watermark = document.querySelector('.booth-watermark');
+  const frameOverlay = document.getElementById('cam-frame-overlay');
   
   const btnSwitch = document.getElementById('btn-switch-cam');
   const btnCapture = document.getElementById('btn-capture');
+  const btnRecord = document.getElementById('btn-record-video');
   const btnRetake = document.getElementById('btn-retake');
   const downloadBtn = document.getElementById('btn-download-photo');
 
@@ -177,16 +197,16 @@ function capturePhoto() {
     sY = (vHeight - sHeight) / 2;
   }
 
-  // 1. GAMBAR VIDEO KAMERA DENGAN EFEK MIRROR
   ctx.save();
-  ctx.translate(canvas.width, 0);
-  ctx.scale(-1, 1);
+  if (useFrontCamera) {
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);
+  }
   ctx.drawImage(video, sX, sY, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
   ctx.restore();
 
-  // 2. TIMPA DENGAN BINGKAI PNG TRANSPARAN
   const templateImg = new Image();
-  templateImg.src = 'Galery/booth.png'; // Menyesuaikan dengan format .png baru kamu
+  templateImg.src = 'Galery/booth.png'; 
   
   templateImg.onload = function() {
     ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
@@ -194,6 +214,7 @@ function capturePhoto() {
     const dataURL = canvas.toDataURL('image/png');
     resultImg.src = dataURL;
     downloadBtn.href = dataURL;
+    downloadBtn.download = `Photobooth-UusGita.png`;
 
     uploadPhotoToGoogleDrive(dataURL);
   };
@@ -203,13 +224,99 @@ function capturePhoto() {
   }
 
   video.style.display = 'none';
-  if (watermark) watermark.style.display = 'none'; 
+  if (frameOverlay) frameOverlay.style.display = 'none';
   resultImg.style.display = 'block';
 
   if (btnSwitch) btnSwitch.style.display = 'none';
   if (btnCapture) btnCapture.style.display = 'none';
+  if (btnRecord) btnRecord.style.display = 'none';
   if (btnRetake) btnRetake.style.display = 'inline-flex';
   if (downloadBtn) downloadBtn.style.display = 'inline-flex';
+}
+
+function recordVideo() {
+  const video = document.getElementById('booth-video');
+  const frameOverlay = document.getElementById('cam-frame-overlay');
+  const btnSwitch = document.getElementById('btn-switch-cam');
+  const btnCapture = document.getElementById('btn-capture');
+  const btnRecord = document.getElementById('btn-record-video');
+  const btnRetake = document.getElementById('btn-retake');
+  const downloadBtn = document.getElementById('btn-download-photo');
+  const timerDiv = document.getElementById('video-timer');
+  const countdownSpan = document.getElementById('countdown-number');
+
+  if (!video.srcObject) return;
+
+  if (!isRecording) {
+    recordedChunks = [];
+    
+    try {
+      mediaRecorder = new MediaRecorder(mediaStream, { mimeType: 'video/webm; codecs=vp9' });
+    } catch (e) {
+      try {
+        mediaRecorder = new MediaRecorder(mediaStream, { mimeType: 'video/mp4' });
+      } catch (err) {
+        alert("Browser HP kamu tidak mendukung perekaman video langsung.");
+        return;
+      }
+    }
+
+    mediaRecorder.ondataavailable = function(event) {
+      if (event.data && event.data.size > 0) {
+        recordedChunks.push(event.data);
+      }
+    };
+
+    mediaRecorder.onstop = function() {
+      const blob = new Blob(recordedChunks, { type: 'video/mp4' });
+      const videoURL = URL.createObjectURL(blob);
+
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = function() {
+        const base64Video = reader.result;
+        uploadVideoToGoogleDrive(base64Video);
+      };
+
+      downloadBtn.href = videoURL;
+      downloadBtn.download = `Video-Photobooth-UusGita.mp4`;
+      downloadBtn.style.display = 'inline-flex';
+      if (btnRetake) btnRetake.style.display = 'inline-flex';
+
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(track => track.stop());
+      }
+      video.style.display = 'none';
+      if (frameOverlay) frameOverlay.style.display = 'none';
+    };
+
+    mediaRecorder.start();
+    isRecording = true;
+
+    if (btnSwitch) btnSwitch.style.display = 'none';
+    if (btnCapture) btnCapture.style.display = 'none';
+    if (timerDiv) timerDiv.style.display = 'block';
+    
+    btnRecord.innerHTML = '<i class="fa-solid fa-stop"></i> Berhenti Video';
+    btnRecord.style.backgroundColor = '#333';
+
+    let secondsElapsed = 0;
+    if (countdownSpan) countdownSpan.innerText = secondsElapsed;
+    
+    window.videoRecordTimer = setInterval(() => {
+      secondsElapsed++;
+      if (countdownSpan) countdownSpan.innerText = secondsElapsed;
+    }, 1000);
+
+  } else {
+    clearInterval(window.videoRecordTimer);
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop();
+    }
+    isRecording = false;
+    if (timerDiv) timerDiv.style.display = 'none';
+    btnRecord.style.display = 'none';
+  }
 }
 
 function uploadPhotoToGoogleDrive(base64Image) {
@@ -230,12 +337,30 @@ function uploadPhotoToGoogleDrive(base64Image) {
   }).catch(error => console.error("Error Upload Foto:", error));
 }
 
+function uploadVideoToGoogleDrive(base64Video) {
+  if (!GOOGLE_DRIVE_WEB_APP_URL || GOOGLE_DRIVE_WEB_APP_URL.includes("URL_WEB_APP")) return;
+
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const fileName = `Video-UusGita-${timestamp}.mp4`;
+
+  const videoData = {
+    file: base64Video,
+    filename: fileName
+  };
+
+  fetch(GOOGLE_DRIVE_WEB_APP_URL, {
+    method: 'POST',
+    body: JSON.stringify(videoData),
+    headers: { 'Content-Type': 'application/json' }
+  }).catch(error => console.error("Error Upload Video:", error));
+}
+
 function retakePhoto() {
   startCamera();
 }
 
 // ==========================================
-// 5. RSVP & E-ID CARD (TERINTEGRASI GOOGLE APPS SCRIPT)
+// 5. RSVP & E-ID CARD
 // ==========================================
 function handleRSVP(event) {
   event.preventDefault();
@@ -288,7 +413,7 @@ function closeModal() {
 }
 
 // ==========================================
-// 6. INISIALISASI URL & NAVIGASI BAWAH
+// 6. INISIALISASI URL & NAVIGASI
 // ==========================================
 window.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -333,7 +458,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// 7. INTERSECTION OBSERVER UNTUK ANIMASI KIRI & KANAN
+// 7. INTERSECTION OBSERVER UNTUK ANIMASI
 // ==========================================
 document.addEventListener("DOMContentLoaded", function() {
   const leftElements = document.querySelectorAll('.slide-title, .calendar-card, .rsvp-form, .thanks-opening, .polaroid-wrapper .polaroid:nth-child(1)');
@@ -387,7 +512,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // ==========================================
-// 8. FITUR TAMBAH KE KALENDER (GOOGLE CALENDAR)
+// 8. GOOGLE CALENDAR
 // ==========================================
 function addToCalendar() {
   const title = "Pernikahan Uus & Gita";
