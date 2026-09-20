@@ -1,8 +1,8 @@
 // ==========================================
-// 0. KONFIGURASI SUPABASE (DARI DASHBOARD)
+// 0. KONFIGURASI SUPABASE (DENGAN KUNCI ANDA)
 // ==========================================
 const SUPABASE_URL = "https://osdgyhbvesbwlvfipyfo.supabase.co";
-const SUPABASE_ANON_KEY = "MASUKKAN_PUBLISHABLE_KEY_DISINI"; // Ganti dengan sb_publishable_... milikmu[cite: 15]
+const SUPABASE_ANON_KEY = "sb_publishable_JFeEWCN1ov9AfcH5XecD-g_GStrV5Qr";
 
 // Inisialisasi Supabase Client
 const { createClient } = supabase;
