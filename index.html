@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- File CSS Utama -->
-  <link rel="stylesheet" href="style.css?v=21">
+  <link rel="stylesheet" href="style.css?v=26">
 </head>
 <body class="no-scroll">
 
@@ -70,7 +70,7 @@
           <span>02.10.2026</span>
         </div>
 
-        <!-- Nama Tamu Undangan -->
+        <!-- Nama Tamu Undangan (Otomatis Berubah Sesuai Link ?to=...) -->
         <div class="guest-container animate-left">
           <p class="guest-sub">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
           <h3 id="guest-name" class="guest-title">Tamu Undangan</h3>
@@ -116,7 +116,7 @@
           </div>
           <h3 class="person-name">Uus Busrol karim</h3>
           <p class="person-sub">Son of</p>
-          <p class="parents-text">Bapak Karmin (Alm)<br>& Ibu Mamah</p>
+          <p class="parents-text">Bapak Karmin (Kuming)<br>& Ibu Mamah</p>
           <p class="ig-tag">
             <a href="https://instagram.com/upq.us" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
               <i class="fa-brands fa-instagram"></i> @upq.us
@@ -156,7 +156,6 @@
             <span>25</span><span>26</span><span>27</span><span>28</span><span>29</span><span>30</span><span>31</span>
           </div>
         </div>
-        <!-- Tombol Add to Calendar terhubung ke fungsi JavaScript -->
         <button class="btn-action animate-left" onclick="addToCalendar()">Add to Calendar</button>
       </section>
 
@@ -226,18 +225,22 @@
         </div>
       </section>
 
-      <!-- SLIDE 7: Live Photo Booth -->
+      <!-- SLIDE 7: Live Photo Booth (Foto & Video Bebas Start/Stop + Bingkai Live) -->
       <section id="slide-7" class="full-slide photobooth-section">
         <div class="camera-doodle animate-left">📸</div>
         <h2 class="slide-title animate-left">Wedding Photobooth</h2>
         <p class="sub-text animate-right" style="font-size: 12px; color: var(--text-dark); margin-bottom: 8px;">
-          Ambil selfie atau foto seru kamu dengan bingkai spesial Uus & Gita!
+          Ambil selfie atau foto & video seru kamu dengan bingkai spesial Uus & Gita!
         </p>
 
         <div class="booth-wrapper animate-left">
           <div class="booth-container">
             <div id="cam-view-box" class="cam-box">
               <video id="booth-video" autoplay playsinline muted></video>
+              
+              <!-- 🖼️ Bingkai Transparan Live di Preview (Galery/booth.png) -->
+              <img id="cam-frame-overlay" src="Galery/booth.png" alt="Bingkai Photobooth" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; display: none; z-index: 5;" />
+              
               <img id="booth-result" alt="Hasil Foto" style="display:none;" loading="lazy">
               
               <div class="camera-grid">
@@ -246,25 +249,28 @@
                 <div class="grid-line"></div>
                 <div class="grid-line"></div>
               </div>
-
-              <div class="booth-watermark">
-                <span>✨ Happy Wedding ✨</span>
-                <strong>Uus & Gita</strong>
-                <small>02.10.2026</small>
-              </div>
             </div>
             <canvas id="booth-canvas" style="display:none;"></canvas>
           </div>
 
+          <!-- Indikator Durasi Rekam Video -->
+          <div id="video-timer" style="display: none; text-align: center; color: var(--maroon); font-weight: bold; margin: 8px 0; font-size: 13px;">
+            🔴 Merekam video... <span id="countdown-number">0</span> detik
+          </div>
+
           <div class="camera-controls">
-            <button id="btn-start-cam" class="control-btn-left" onclick="startCamera()" title="Buka Kamera">
-              <i class="fa-solid fa-camera"></i>
+            <button id="btn-start-cam" class="btn-action" onclick="startCamera()" style="background-color: var(--maroon); color: #fff;">
+              <i class="fa-solid fa-camera"></i> Buka Kamera
             </button>
             <button id="btn-switch-cam" class="control-btn-left" onclick="switchCamera()" title="Putar Kamera" style="display:none;">
               <i class="fa-solid fa-rotate"></i>
             </button>
-            <button id="btn-capture" class="shutter-btn" onclick="capturePhoto()" title="Ambil Foto" style="display:none;">
-              <div class="shutter-inner"></div>
+            <button id="btn-capture" class="btn-action" onclick="capturePhoto()" style="display:none; background-color: var(--maroon); color: #fff;">
+              📸 Foto
+            </button>
+            <!-- Tombol Rekam Video Bebas (Start/Stop) -->
+            <button id="btn-record-video" class="btn-action" onclick="recordVideo()" style="display:none; background-color: #8B0000; color: #fff;">
+              🎥 Video (Bebas)
             </button>
             <button id="btn-retake" class="btn-olive" onclick="retakePhoto()" style="display:none;">
               <i class="fa-solid fa-rotate-right"></i> Ulang
@@ -298,13 +304,13 @@
         </div>
       </section>
 
-      <!-- SLIDE 9: Wishes / RSVP (FormSubmit Terintegrasi) -->
+      <!-- SLIDE 9: Wishes / RSVP (FormSubmit Terintegrasi ke Email Anda) -->
       <section id="slide-9" class="full-slide">
         <h2 class="slide-title animate-left">Wishes</h2>
         <p class="sub-text animate-right">Konfirmasi Kehadiran & Kirim Ucapan Harapan.</p>
 
         <form class="rsvp-form animate-left" id="rsvp-form" action="https://formsubmit.co/rizqi.ridwan25@gmail.com" method="POST" onsubmit="handleRSVP(event)">
-          <!-- Pengaturan Template Box FormSubmit -->
+          <!-- Pengaturan FormSubmit -->
           <input type="hidden" name="_subject" value="✨ Wedding Pass & RSVP Baru dari Tamu Undangan!">
           <input type="hidden" name="_template" value="box">
           <input type="hidden" name="_captcha" value="false">
@@ -399,7 +405,7 @@
     </div>
   </main>
 
-  <!-- MODAL POPUP E-ID CARD / WEDDING PASS -->
+  <!-- MODAL POPUP E-ID CARD / WEDDING PASS (Tema Maroon Garis Putus-Putus Sesuai Keinginan Anda) -->
   <div id="idcard-modal" class="modal-overlay">
     <div class="modal-content">
       <button class="close-modal" onclick="closeModal()">&times;</button>
@@ -417,7 +423,7 @@
           <div class="card-row">
             <div>
               <p class="info-label">Jumlah Tamu</p>
-              <p id="card-guest-count" class="info-val">1 Person</p>
+              <p id="card-guest-count" class="info-val">1 Orang</p>
             </div>
             <div>
               <p class="info-label">DATE</p>
