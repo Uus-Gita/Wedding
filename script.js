@@ -97,6 +97,7 @@ let mediaRecorder;
 let recordedChunks = [];
 let isRecording = false;
 
+// ⚠️ Pastikan URL Web App Google Apps Script kamu sudah terpasang di sini
 const GOOGLE_DRIVE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbztB7dCANIVbL53y9LZLmP-OhKaxlasLVCoV7atR9K0NlbcyxCxfOp7lwQpFtY468KZ/exec";
 
 async function startCamera() {
@@ -127,7 +128,7 @@ async function startCamera() {
       video: { 
         facingMode: useFrontCamera ? 'user' : 'environment'
       },
-      audio: true // Diaktifkan agar suara ikut terekam
+      audio: true // Diaktifkan agar suara ikut terekam saat rekam video
     };
 
     mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -180,7 +181,6 @@ function capturePhoto() {
 
   if (!video.srcObject) return;
 
-  // Menggunakan resolusi asli video agar tidak zoom berlebihan
   canvas.width = video.videoWidth || 720;
   canvas.height = video.videoHeight || 1280; 
   const ctx = canvas.getContext('2d');
@@ -295,7 +295,6 @@ function recordVideo() {
         video.parentNode.appendChild(videoPlayer);
       }
 
-      // Mengatasi mirror pada video review agar gerakan kanan-kiri normal
       if (useFrontCamera) {
         videoPlayer.style.transform = 'scaleX(-1)';
       } else {
