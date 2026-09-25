@@ -1,12 +1,15 @@
 // ==========================================
-// 0. KONFIGURASI SUPABASE (DENGAN KUNCI ANDA)
+// 0. KONFIGURASI SUPABASE & GOOGLE DRIVE
 // ==========================================
 const SUPABASE_URL = "https://osdgyhbvesbwlvfipyfo.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_JFeEWCN1ov9AfcH5XecD-g_GStrV5Qr";
 
-// Inisialisasi Supabase Client
+// Inisialisasi Supabase Client (Untuk RSVP & Wishes)
 const { createClient } = supabase;
 const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// 🔗 Masukkan URL Web App Google Apps Script Anda di sini untuk Google Drive
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfsxafYCZUIsxk-e_6Mzo0UiY2wsXesiRCdJlrRIzYpsETirgAq5FkxoGolnbmxgbq/exec";
 
 
 // ==========================================
@@ -100,7 +103,7 @@ function createHeart() {
 setInterval(createHeart, 350);
 
 // ==========================================
-// 4. FITUR PHOTOBOOTH (SUPABASE STORAGE)
+// 4. FITUR PHOTOBOOTH (GOOGLE DRIVE VIA APPS SCRIPT)
 // ==========================================
 let mediaStream = null;
 let useFrontCamera = true;
@@ -212,7 +215,8 @@ function capturePhoto() {
     downloadBtn.href = dataURL;
     downloadBtn.download = `Photobooth-UusGita.png`;
 
-    uploadPhotoToSupabase(dataURL);
+    // Kirim otomatis ke Google Drive
+    uploadPhotoToGoogleDrive(dataURL);
   };
 
   if (mediaStream) {
@@ -280,7 +284,8 @@ function recordVideo() {
       reader.readAsDataURL(blob);
       reader.onloadend = function() {
         const base64Video = reader.result;
-        uploadVideoToSupabase(base64Video);
+        // Kirim otomatis ke Google Drive
+        uploadVideoToGoogleDrive(base64Video);
       };
 
       if (resultImg) resultImg.style.display = 'none';
@@ -354,49 +359,59 @@ function recordVideo() {
   }
 }
 
-// Fungsi Upload Foto ke Supabase Storage (Bucket: FotoBooth)
-async function uploadPhotoToSupabase(base64Image) {
+// Fungsi Mengirim Foto ke Google Drive lewat Google Apps Script
+async function uploadPhotoToGoogleDrive(base64Image) {
   try {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const fileName = `Photobooth-UusGita-${timestamp}.png`;
 
-    const response = await fetch(base64Image);
-    const blob = await response.blob();
+    const payload = {
+      fileData: base64Image,
+      fileName: fileName,
+      mimeType: "image/png"
+    };
 
-    const { data, error } = await _supabase.storage
-      .from('FotoBooth')
-      .upload(fileName, blob, { contentType: 'image/png' });
+    const response = await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
 
-    if (error) {
-      console.error("Gagal Upload Foto ke Supabase:", error.message);
+    const result = await response.json();
+    if (result.status === "success") {
+      console.log("Foto Berhasil Masuk ke Google Drive:", result.fileUrl);
     } else {
-      console.log("Foto Berhasil Diupload:", data);
+      console.error("Gagal Google Drive:", result.message);
     }
   } catch (err) {
-    console.error("Error Upload Foto:", err);
+    console.error("Error Upload Foto ke Google Drive:", err);
   }
 }
 
-// Fungsi Upload Video ke Supabase Storage (Bucket: FotoBooth)
-async function uploadVideoToSupabase(base64Video) {
+// Fungsi Mengirim Video ke Google Drive lewat Google Apps Script
+async function uploadVideoToGoogleDrive(base64Video) {
   try {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const fileName = `Video-UusGita-${timestamp}.mp4`;
 
-    const response = await fetch(base64Video);
-    const blob = await response.blob();
+    const payload = {
+      fileData: base64Video,
+      fileName: fileName,
+      mimeType: "video/mp4"
+    };
 
-    const { data, error } = await _supabase.storage
-      .from('FotoBooth')
-      .upload(fileName, blob, { contentType: 'video/mp4' });
+    const response = await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
 
-    if (error) {
-      console.error("Gagal Upload Video ke Supabase:", error.message);
+    const result = await response.json();
+    if (result.status === "success") {
+      console.log("Video Berhasil Masuk ke Google Drive:", result.fileUrl);
     } else {
-      console.log("Video Berhasil Diupload:", data);
+      console.error("Gagal Google Drive:", result.message);
     }
   } catch (err) {
-    console.error("Error Upload Video:", err);
+    console.error("Error Upload Video ke Google Drive:", err);
   }
 }
 
@@ -414,60 +429,95 @@ function retakePhoto() {
 
 
 // ==========================================
-// 5. RSVP & E-ID CARD (SUPABASE DATABASE)
+// 5. WISHES & RSVP (SUPABASE DATABASE)
 // ==========================================
 async function handleRSVP(event) {
   event.preventDefault();
   
   const nameInput = document.getElementById('rsvp-name');
-  const attendanceInput = document.getElementById('rsvp-attendance');
-  const guestsInput = document.getElementById('rsvp-guests');
   const messageInput = document.getElementById('rsvp-message');
 
   const name = nameInput ? nameInput.value : "";
-  const attendance = attendanceInput ? attendanceInput.value : "";
-  const guests = guestsInput ? guestsInput.value : "1 Orang";
   const message = messageInput ? messageInput.value : "";
 
-  // Kirim data ke Tabel Supabase: rsvp_guests
+  // Simpan ke database Supabase
   const { data, error } = await _supabase
     .from('rsvp_guests')
     .insert([{ 
       name: name, 
-      attendance: attendance, 
-      guests: guests, 
+      attendance: "Hadir", 
+      guests: "1 Orang", 
       message: message 
     }]);
 
   if (error) {
-    console.error("Gagal menyimpan RSVP:", error.message);
-    alert("Gagal mengirim RSVP. Silakan coba lagi.");
+    console.error("Gagal menyimpan ucapan:", error.message);
+    alert("Gagal mengirim ucapan. Silakan coba lagi.");
     return;
   } else {
-    console.log("RSVP berhasil disimpan:", data);
+    console.log("Ucapan berhasil disimpan:", data);
   }
 
-  // Tampilkan data ke E-ID Card secara instan
-  const nameEl = document.getElementById('card-guest-name');
-  const countEl = document.getElementById('card-guest-count');
-  const statusEl = document.getElementById('card-attendance-status');
-  const msgEl = document.getElementById('card-guest-message');
-
-  if (nameEl) nameEl.innerText = name;
-  if (countEl) countEl.innerText = guests;
-  if (statusEl) statusEl.innerText = attendance;
-  if (msgEl) msgEl.innerText = `"${message || '-'}"`;
-
-  const modalEl = document.getElementById('idcard-modal');
-  if (modalEl) modalEl.classList.add('active');
-  
-  const formEl = document.getElementById('rsvp-form');
-  if (formEl) formEl.reset();
+  // Reset form & muat ulang daftar ucapan secara real-time
+  nameInput.value = "";
+  messageInput.value = "";
+  loadWishes();
 }
 
-function closeModal() {
-  const modalEl = document.getElementById('idcard-modal');
-  if (modalEl) modalEl.classList.remove('active');
+// Fungsi untuk mengambil & menampilkan daftar ucapan dari Supabase
+async function loadWishes() {
+  const wishesListContainer = document.getElementById('wishes-list');
+  if (!wishesListContainer) return;
+
+  try {
+    const { data, error } = await _supabase
+      .from('rsvp_guests')
+      .select('*')
+      .order('id', { ascending: false });
+
+    if (error) {
+      console.error("Gagal memuat ucapan:", error.message);
+      wishesListContainer.innerHTML = '<p style="text-align: center; font-size: 12px; color: red;">Gagal memuat ucapan.</p>';
+      return;
+    }
+
+    if (data.length === 0) {
+      wishesListContainer.innerHTML = '<p style="text-align: center; font-size: 12px; color: #777;">Belum ada ucapan.</p>';
+      return;
+    }
+
+    let htmlContent = "";
+    data.forEach(item => {
+      let dateString = "";
+      if (item.created_at) {
+        let d = new Date(item.created_at);
+        dateString = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+      }
+
+      htmlContent += `
+        <div style="display: flex; gap: 10px; border-bottom: 1px solid #eee; padding: 8px 0; align-items: flex-start;">
+          <div style="font-size: 16px; color: #555; margin-top: 2px;"><i class="fa-regular fa-comment"></i></div>
+          <div style="flex-grow: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <strong style="font-size: 13px; color: #333;">${escapeHtml(item.name)}</strong>
+              <span style="font-size: 10px; color: #888;">${dateString}</span>
+            </div>
+            <p style="margin: 4px 0 0 0; font-size: 12px; color: #555; word-break: break-word;">${escapeHtml(item.message || '-')}</p>
+          </div>
+        </div>
+      `;
+    });
+
+    wishesListContainer.innerHTML = htmlContent;
+
+  } catch (err) {
+    console.error("Error loading wishes:", err);
+  }
+}
+
+function escapeHtml(text) {
+  if (!text) return "";
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
 
@@ -475,6 +525,9 @@ function closeModal() {
 // 6. INISIALISASI URL & NAVIGASI
 // ==========================================
 window.addEventListener('DOMContentLoaded', () => {
+  // Muat daftar ucapan saat halaman dibuka
+  loadWishes();
+
   const urlParams = new URLSearchParams(window.location.search);
   const guestName = urlParams.get('to');
   if (guestName && document.getElementById('guest-name')) {
