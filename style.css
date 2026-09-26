@@ -61,35 +61,92 @@ img {
 }
 
 /* ==========================================
-   3. NAVIGASI BAWAH & TOMBOL MUSIK MELAYANG
+   3. 💧 LIQUID / BUBBLE BOTTOM NAVIGATION BAR (11 ICON)
    ========================================== */
 .bottom-nav {
   position: fixed;
-  bottom: 40px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: var(--maroon);
-  padding: 8px 16px;
-  border-radius: 30px;
+  width: 98%;
+  max-width: 440px;
+  background-color: rgba(139, 38, 62, 0.98);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
-  gap: 10px;
-  z-index: 99;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4px;
+  border-radius: 35px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  z-index: 999;
+  transition: all 0.4s ease;
+}
+
+.bottom-nav.hidden {
+  display: none !important;
 }
 
 .nav-item {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 14px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.55);
   text-decoration: none;
-  transition: color 0.3s;
-  padding: 2px;
+  font-size: 13px;
+  height: 38px;
+  width: 28px;
+  border-radius: 50%;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.nav-item.active, .nav-item:hover { color: #FFFFFF; }
+.nav-item i {
+  transition: transform 0.3s ease;
+}
+
+.nav-text {
+  position: absolute;
+  bottom: -15px;
+  font-size: 7.5px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: #FFFFFF;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* Efek Tombol Aktif Melompat / Berlubang untuk 11 Menu */
+.nav-item.active {
+  background-color: #FFFFFF;
+  color: var(--maroon);
+  width: 52px;
+  height: 38px;
+  border-radius: 20px;
+  transform: translateY(-10px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25), 0 0 0 3px rgba(139, 38, 62, 0.95);
+  flex-direction: row;
+  gap: 2px;
+}
+
+.nav-item.active i {
+  font-size: 11px;
+  transform: scale(1.1);
+}
+
+.nav-item.active .nav-text {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 .floating-music {
   position: fixed;
-  bottom: 82px;
+  bottom: 85px;
   right: calc(50% - 210px);
   background-color: #2D2D2D;
   color: white;
@@ -150,7 +207,7 @@ img {
 .full-slide {
   min-height: 100vh;
   scroll-snap-align: none;
-  padding: 30px 15px 85px;
+  padding: 30px 15px 105px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -376,7 +433,7 @@ img {
 }
 
 /* ==========================================
-   11. SLIDE 6 & 7: LOKASI & PHOTOBOOTH (RASIO 4:3 VERTIKAL)
+   11. SLIDE 6 & 7: LOKASI & PHOTOBOOTH
    ========================================== */
 .doodle-card, .media-card {
   border: 2px solid var(--maroon);
@@ -388,7 +445,7 @@ img {
   background-color: rgba(250, 246, 237, 0.9);
 }
 
-#slide-6 { justify-content: flex-start; padding-top: 30px; padding-bottom: 85px; overflow-y: auto; }
+#slide-6 { justify-content: flex-start; padding-top: 30px; padding-bottom: 105px; overflow-y: auto; }
 .map-box { width: 100%; height: 90px; border-radius: 10px; overflow: hidden; border: 1px solid var(--maroon); margin: 6px 0; }
 .map-iframe { width: 100%; height: 100%; border: 0; }
 .btn-olive { background-color: var(--green-olive); color: white; border: none; padding: 6px 14px; border-radius: 10px; font-family: var(--font-handwritten); font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
@@ -396,7 +453,7 @@ img {
 .photobooth-section {
   justify-content: flex-start !important;
   padding-top: 20px !important;
-  padding-bottom: 120px !important;
+  padding-bottom: 130px !important;
   overflow-y: auto !important;
 }
 
@@ -419,7 +476,6 @@ img {
   margin: 0 auto;
 }
 
-/* DIUBAH MENJADI RASIO 4:3 (3/4) AGAR LEBIH LUAS DAN PAS */
 .cam-box {
   position: relative;
   width: 100% !important;
@@ -443,10 +499,9 @@ img {
   object-fit: cover !important;
   display: block;
   border-radius: 10px;
-  transform: scaleX(1); /* Membalikkan video preview agar tidak mirror di layar HP */
+  transform: scaleX(1);
 }
 
-/* Jika foto sudah jadi, matikan efek flip-nya */
 #booth-result {
   transform: none !important;
 }
@@ -470,26 +525,6 @@ img {
   border: 0.5px solid rgba(255, 255, 255, 0.8);
 }
 
-.booth-watermark {
-  position: absolute;
-  bottom: 12px !important;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(139, 38, 62, 0.85) !important;
-  color: #fff;
-  padding: 8px 12px !important;
-  border-radius: 10px !important;
-  border: 1px dashed #fef3d6;
-  text-align: center;
-  pointer-events: none;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  width: 85% !important;
-  z-index: 10;
-}
-.booth-watermark span { font-size: 9px; display: block; letter-spacing: 1px; color: #fef3d6; }
-.booth-watermark strong { font-family: 'Poppins', sans-serif; font-size: 12px; display: block; line-height: 1.1; }
-.booth-watermark small { font-size: 8px; opacity: 0.9; }
-
 .camera-controls {
   display: flex;
   align-items: center;
@@ -497,29 +532,6 @@ img {
   gap: 12px;
   margin-top: 15px;
   flex-wrap: wrap;
-}
-
-.shutter-btn {
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-  background: transparent;
-  border: 4px solid var(--maroon);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  outline: none;
-  transition: transform 0.1s ease;
-}
-.shutter-btn:active {
-  transform: scale(0.92);
-}
-.shutter-inner {
-  width: 50px;
-  height: 50px;
-  background: var(--maroon);
-  border-radius: 50%;
 }
 
 .control-btn-left, .control-btn-right {
@@ -542,7 +554,7 @@ img {
 }
 
 /* ==========================================
-   12. SLIDE 8: OUR MEMORIES (CSS GRID)
+   12. SLIDE 8: OUR MEMORIES
    ========================================== */
 #slide-8 { justify-content: flex-start; padding-top: 30px; overflow-y: auto; }
 .gallery-grid { 
@@ -583,9 +595,9 @@ img {
 .rsvp-form input, .rsvp-form select, .rsvp-form textarea { width: 100%; padding: 5px; border: 1px solid #ccc; background-color: #FAF6ED; font-family: var(--font-handwritten); font-size: 13px; margin-top: 2px; border-radius: 6px; }
 
 /* ==========================================
-   14. SLIDE 10: WEDDING GIFT & TOMBOL WA
+   14. SLIDE 10: WEDDING GIFT
    ========================================== */
-#slide-10 { justify-content: flex-start; padding-top: 25px; padding-bottom: 85px; overflow-y: auto; }
+#slide-10 { justify-content: flex-start; padding-top: 25px; padding-bottom: 105px; overflow-y: auto; }
 .atm-card {
   position: relative;
   width: 100%;
@@ -611,7 +623,6 @@ img {
 .rekening-num { font-family: 'Poppins', sans-serif; font-size: 12px; letter-spacing: 1px; color: #4a5568; }
 .btn-copy-card { position: absolute; bottom: 10px; right: 12px; background: rgba(0, 0, 0, 0.45); color: #ffffff; border: none; padding: 3px 10px; border-radius: 14px; font-family: 'Poppins', sans-serif; font-size: 10px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
 
-/* Styling Tombol Konfirmasi WA */
 .btn-wa-confirm {
   display: inline-flex;
   align-items: center;
@@ -646,7 +657,7 @@ img {
    ========================================== */
 .slide-thanks {
   justify-content: center;
-  padding: 30px 20px 85px;
+  padding: 30px 20px 105px;
 }
 
 .thanks-opening {
@@ -713,7 +724,7 @@ img {
 }
 
 /* ==========================================
-   16. MODAL POPUP E-ID CARD & STATUS UCAPAN
+   16. MODAL POPUP E-ID CARD
    ========================================== */
 .modal-overlay {
   position: fixed;
@@ -838,7 +849,7 @@ img {
 }
 
 /* ==========================================
-   17. ANIMASI SCROLL MASUK KIRI & KANAN (HALUS & SESUAI POSISI)
+   17. ANIMASI SCROLL MASUK KIRI & KANAN
    ========================================== */
 .animate-left {
   opacity: 0;
