@@ -17,7 +17,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- File CSS Utama -->
-  <link rel="stylesheet" href="style.css?v=26">
+  <link rel="stylesheet" href="style.css?v=28">
 </head>
 <body class="no-scroll">
 
@@ -35,19 +35,20 @@
     <i class="fa-solid fa-music"></i>
   </button>
 
-  <!-- Bottom Navigation Bar (Menu Bawah) -->
-  <nav class="bottom-nav">
-    <a href="#slide-1" class="nav-item active" title="Cover"><i class="fa-solid fa-house"></i></a>
-    <a href="#slide-2" class="nav-item" title="Verse"><i class="fa-solid fa-quote-left"></i></a>
-    <a href="#slide-3" class="nav-item" title="Mempelai"><i class="fa-solid fa-user-group"></i></a>
-    <a href="#slide-4" class="nav-item" title="Kalender"><i class="fa-regular fa-calendar-days"></i></a>
-    <a href="#slide-5" class="nav-item" title="Countdown"><i class="fa-regular fa-clock"></i></a>
-    <a href="#slide-6" class="nav-item" title="Lokasi"><i class="fa-solid fa-location-dot"></i></a>
-    <a href="#slide-7" class="nav-item" title="Photobooth"><i class="fa-solid fa-camera-retro"></i></a>
-    <a href="#slide-8" class="nav-item" title="Galeri"><i class="fa-regular fa-image"></i></a>
-    <a href="#slide-9" class="nav-item" title="RSVP"><i class="fa-regular fa-comment-dots"></i></a>
-    <a href="#slide-10" class="nav-item" title="Hadiah"><i class="fa-solid fa-gift"></i></a>
-    <a href="#slide-11" class="nav-item" title="Thanks"><i class="fa-solid fa-heart"></i></a>
+  <!-- 💧 Liquid / Bubble Bottom Navigation Bar (Awalnya tersembunyi dengan kelas 'hidden') -->
+  <!-- 💧 Liquid / Bubble Bottom Navigation Bar (11 Menu) -->
+  <nav class="bottom-nav hidden">
+    <a href="#slide-1" class="nav-item" onclick="resetToCover()" title="Cover"><i class="fa-solid fa-house"></i><span class="nav-text">Cover</span></a>
+    <a href="#slide-2" class="nav-item active" onclick="setActiveNav(this)" title="Verse"><i class="fa-solid fa-quote-left"></i><span class="nav-text">Verse</span></a>
+    <a href="#slide-3" class="nav-item" onclick="setActiveNav(this)" title="Mempelai"><i class="fa-solid fa-user"></i><span class="nav-text">Mempelai</span></a>
+    <a href="#slide-4" class="nav-item" onclick="setActiveNav(this)" title="Kalender"><i class="fa-regular fa-calendar-days"></i><span class="nav-text">Kalender</span></a>
+    <a href="#slide-5" class="nav-item" onclick="setActiveNav(this)" title="Waktu"><i class="fa-regular fa-clock"></i><span class="nav-text">Waktu</span></a>
+    <a href="#slide-6" class="nav-item" onclick="setActiveNav(this)" title="Lokasi"><i class="fa-solid fa-location-dot"></i><span class="nav-text">Lokasi</span></a>
+    <a href="#slide-7" class="nav-item" onclick="setActiveNav(this)" title="Booth"><i class="fa-solid fa-camera"></i><span class="nav-text">Booth</span></a>
+    <a href="#slide-8" class="nav-item" onclick="setActiveNav(this)" title="Galeri"><i class="fa-regular fa-image"></i><span class="nav-text">Galeri</span></a>
+    <a href="#slide-9" class="nav-item" onclick="setActiveNav(this)" title="RSVP"><i class="fa-regular fa-note-sticky"></i><span class="nav-text">RSVP</span></a>
+    <a href="#slide-10" class="nav-item" onclick="setActiveNav(this)" title="Hadiah"><i class="fa-solid fa-gift"></i><span class="nav-text">Hadiah</span></a>
+    <a href="#slide-11" class="nav-item" onclick="setActiveNav(this)" title="Thanks"><i class="fa-solid fa-heart"></i><span class="nav-text">Thanks</span></a>
   </nav>
 
   <!-- Konten Utama (Di dalam Bingkai HP) -->
@@ -332,6 +333,11 @@
 
           <button type="submit" class="btn-action">Kirim</button>
         </form>
+
+        <!-- Kotak Daftar Ucapan Tamu -->
+        <div id="wishes-list" style="width: 100%; max-width: 320px; max-height: 200px; overflow-y: auto; background: rgba(250, 246, 237, 0.9); border: 2px solid var(--maroon); border-radius: 12px; margin-top: 15px; padding: 10px; box-sizing: border-box; text-align: left;">
+          <p style="text-align: center; font-size: 11px; color: #777; margin: 10px 0;">Memuat daftar ucapan...</p>
+        </div>
       </section>
 
       <!-- SLIDE 10: Wedding Gift (SeaBank) -->
