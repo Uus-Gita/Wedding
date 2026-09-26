@@ -13,8 +13,15 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfsxafYCZUIs
 
 
 // ==========================================
-// 1. PENGATURAN UTAMA & MUSIK
+// 1. PENGATURAN UTAMA, NAVIGASI & MUSIK
 // ==========================================
+
+function setActiveNav(element) {
+  const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+  navItems.forEach(item => item.classList.remove('active'));
+  element.classList.add('active');
+}
+
 function openInvitation() {
   const cover = document.getElementById('slide-1');
   if (cover) {
@@ -25,11 +32,52 @@ function openInvitation() {
   }
   document.body.classList.remove('no-scroll');
 
+  // Munculkan Bottom Nav Bar setelah undangan dibuka
+  const bottomNav = document.querySelector('.bottom-nav');
+  if (bottomNav) {
+    bottomNav.classList.remove('hidden');
+  }
+
+  // Langsung arahkan ke Slide 2 (Verse) secara mulus
+  const scrollContainer = document.querySelector('.scroll-container');
+  const slide2 = document.getElementById('slide-2');
+  if (slide2 && scrollContainer) {
+    const topPos = slide2.offsetTop - scrollContainer.offsetTop;
+    scrollContainer.scrollTo({ top: topPos, behavior: 'smooth' });
+  }
+
+  // Set aktif bar bawah ke menu Verse (Slide 2)
+  const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+  navItems.forEach(item => item.classList.remove('active'));
+  const verseNav = document.querySelector('.bottom-nav .nav-item[href="#slide-2"]');
+  if (verseNav) verseNav.classList.add('active');
+
   const music = document.getElementById('bg-music');
   const btn = document.getElementById('music-btn');
   if (music) {
     music.play().catch(e => console.log(e));
     if (btn) btn.classList.add('playing');
+  }
+}
+
+// Fungsi saat ikon Home ditekan untuk kembali ke Cover awal & sembunyikan bar
+function resetToCover() {
+  const cover = document.getElementById('slide-1');
+  if (cover) {
+    cover.style.display = 'flex';
+    cover.classList.remove('cover-zoom-out');
+  }
+  document.body.classList.add('no-scroll');
+
+  // Sembunyikan kembali Bottom Nav Bar
+  const bottomNav = document.querySelector('.bottom-nav');
+  if (bottomNav) {
+    bottomNav.classList.add('hidden');
+  }
+
+  const scrollContainer = document.querySelector('.scroll-container');
+  if (scrollContainer) {
+    scrollContainer.scrollTo({ top: 0, behavior: 'instant' });
   }
 }
 
@@ -215,7 +263,6 @@ function capturePhoto() {
     downloadBtn.href = dataURL;
     downloadBtn.download = `Photobooth-UusGita.png`;
 
-    // Kirim otomatis ke Google Drive
     uploadPhotoToGoogleDrive(dataURL);
   };
 
@@ -284,7 +331,6 @@ function recordVideo() {
       reader.readAsDataURL(blob);
       reader.onloadend = function() {
         const base64Video = reader.result;
-        // Kirim otomatis ke Google Drive
         uploadVideoToGoogleDrive(base64Video);
       };
 
@@ -359,7 +405,6 @@ function recordVideo() {
   }
 }
 
-// Fungsi Mengirim Foto ke Google Drive lewat Google Apps Script
 async function uploadPhotoToGoogleDrive(base64Image) {
   try {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -379,15 +424,12 @@ async function uploadPhotoToGoogleDrive(base64Image) {
     const result = await response.json();
     if (result.status === "success") {
       console.log("Foto Berhasil Masuk ke Google Drive:", result.fileUrl);
-    } else {
-      console.error("Gagal Google Drive:", result.message);
     }
   } catch (err) {
     console.error("Error Upload Foto ke Google Drive:", err);
   }
 }
 
-// Fungsi Mengirim Video ke Google Drive lewat Google Apps Script
 async function uploadVideoToGoogleDrive(base64Video) {
   try {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -407,8 +449,6 @@ async function uploadVideoToGoogleDrive(base64Video) {
     const result = await response.json();
     if (result.status === "success") {
       console.log("Video Berhasil Masuk ke Google Drive:", result.fileUrl);
-    } else {
-      console.error("Gagal Google Drive:", result.message);
     }
   } catch (err) {
     console.error("Error Upload Video ke Google Drive:", err);
@@ -435,18 +475,21 @@ async function handleRSVP(event) {
   event.preventDefault();
   
   const nameInput = document.getElementById('rsvp-name');
+  const attendanceSelect = document.getElementById('rsvp-attendance');
+  const guestsSelect = document.getElementById('rsvp-guests');
   const messageInput = document.getElementById('rsvp-message');
 
   const name = nameInput ? nameInput.value : "";
+  const attendance = attendanceSelect ? attendanceSelect.value : "Ya, Saya Akan Hadir";
+  const guests = guestsSelect ? guestsSelect.value : "1 Orang";
   const message = messageInput ? messageInput.value : "";
 
-  // Simpan ke database Supabase
   const { data, error } = await _supabase
     .from('rsvp_guests')
     .insert([{ 
       name: name, 
-      attendance: "Hadir", 
-      guests: "1 Orang", 
+      attendance: attendance, 
+      guests: guests, 
       message: message 
     }]);
 
@@ -454,17 +497,13 @@ async function handleRSVP(event) {
     console.error("Gagal menyimpan ucapan:", error.message);
     alert("Gagal mengirim ucapan. Silakan coba lagi.");
     return;
-  } else {
-    console.log("Ucapan berhasil disimpan:", data);
   }
 
-  // Reset form & muat ulang daftar ucapan secara real-time
   nameInput.value = "";
   messageInput.value = "";
   loadWishes();
 }
 
-// Fungsi untuk mengambil & menampilkan daftar ucapan dari Supabase
 async function loadWishes() {
   const wishesListContainer = document.getElementById('wishes-list');
   if (!wishesListContainer) return;
@@ -476,13 +515,12 @@ async function loadWishes() {
       .order('id', { ascending: false });
 
     if (error) {
-      console.error("Gagal memuat ucapan:", error.message);
       wishesListContainer.innerHTML = '<p style="text-align: center; font-size: 12px; color: red;">Gagal memuat ucapan.</p>';
       return;
     }
 
-    if (data.length === 0) {
-      wishesListContainer.innerHTML = '<p style="text-align: center; font-size: 12px; color: #777;">Belum ada ucapan.</p>';
+    if (!data || data.length === 0) {
+      wishesListContainer.innerHTML = '<p style="text-align: center; font-size: 11px; color: #777; margin: 10px 0;">Belum ada ucapan.</p>';
       return;
     }
 
@@ -495,15 +533,12 @@ async function loadWishes() {
       }
 
       htmlContent += `
-        <div style="display: flex; gap: 10px; border-bottom: 1px solid #eee; padding: 8px 0; align-items: flex-start;">
-          <div style="font-size: 16px; color: #555; margin-top: 2px;"><i class="fa-regular fa-comment"></i></div>
-          <div style="flex-grow: 1;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <strong style="font-size: 13px; color: #333;">${escapeHtml(item.name)}</strong>
-              <span style="font-size: 10px; color: #888;">${dateString}</span>
-            </div>
-            <p style="margin: 4px 0 0 0; font-size: 12px; color: #555; word-break: break-word;">${escapeHtml(item.message || '-')}</p>
+        <div style="border-bottom: 1px solid #ebdcd0; padding: 6px 0; font-size: 11px; text-align: left;">
+          <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--maroon);">
+            <span>${escapeHtml(item.name)}</span>
+            <span style="font-size: 9px; color: #888;">${dateString}</span>
           </div>
+          <p style="margin: 2px 0 0 0; color: var(--text-dark); word-break: break-word;">${escapeHtml(item.message || '-')}</p>
         </div>
       `;
     });
@@ -525,7 +560,6 @@ function escapeHtml(text) {
 // 6. INISIALISASI URL & NAVIGASI
 // ==========================================
 window.addEventListener('DOMContentLoaded', () => {
-  // Muat daftar ucapan saat halaman dibuka
   loadWishes();
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -536,22 +570,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const navLinks = document.querySelectorAll('.bottom-nav .nav-item');
   const scrollContainer = document.querySelector('.scroll-container');
-  const homeIcon = document.querySelector('.bottom-nav .nav-item[href="#slide-1"]');
-
-  if (homeIcon) {
-    homeIcon.addEventListener('click', function(e) {
-      e.preventDefault();
-      const cover = document.getElementById('slide-1');
-      if (cover) {
-        cover.style.display = 'flex';
-        cover.classList.remove('cover-zoom-out');
-      }
-      document.body.classList.add('no-scroll');
-      if (scrollContainer) {
-        scrollContainer.scrollTo({ top: 0, behavior: 'instant' });
-      }
-    });
-  }
 
   navLinks.forEach(link => {
     if (link.getAttribute('href') === '#slide-1') return;
@@ -574,34 +592,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // 7. INTERSECTION OBSERVER UNTUK ANIMASI
 // ==========================================
 document.addEventListener("DOMContentLoaded", function() {
-  const leftElements = document.querySelectorAll('.slide-title, .calendar-card, .rsvp-form, .thanks-opening, .polaroid-wrapper .polaroid:nth-child(1)');
-  const rightElements = document.querySelectorAll('.verse-text, .live-calendar-card, .thanks-couples, .polaroid-wrapper .polaroid:nth-child(2)');
-
-  const profileCards = document.querySelectorAll('.profile-card');
-  if (profileCards.length >= 2) {
-    profileCards[0].classList.add('animate-left');
-    profileCards[1].classList.add('animate-right');
-  }
-
-  const atmCards = document.querySelectorAll('.atm-card');
-  if (atmCards.length >= 2) {
-    atmCards[0].classList.add('animate-left');
-    atmCards[1].classList.add('animate-right');
-  }
-
-  const galleryItems = document.querySelectorAll('.gallery-grid .grid-item');
-  galleryItems.forEach((item, index) => {
-    if (index === 0) {
-      item.classList.add('animate-left');
-    } else if (index % 2 !== 0) {
-      item.classList.add('animate-left');
-    } else {
-      item.classList.add('animate-right');
-    }
-  });
-
-  leftElements.forEach(el => el.classList.add('animate-left'));
-  rightElements.forEach(el => el.classList.add('animate-right'));
+  const animatedElements = document.querySelectorAll('.animate-left, .animate-right');
 
   const observerOptions = {
     root: null,
@@ -613,15 +604,11 @@ document.addEventListener("DOMContentLoaded", function() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('active');
-      } else {
-        entry.target.classList.remove('active');
       }
     });
   }, observerOptions);
 
-  document.querySelectorAll('.animate-left, .animate-right').forEach(el => {
-    observer.observe(el);
-  });
+  animatedElements.forEach(el => observer.observe(el));
 });
 
 
