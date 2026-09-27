@@ -38,17 +38,19 @@
   <!-- 💧 Liquid / Bubble Bottom Navigation Bar (Awalnya tersembunyi dengan kelas 'hidden') -->
   <!-- 💧 Liquid / Bubble Bottom Navigation Bar (11 Menu) -->
   <nav class="bottom-nav hidden">
-    <a href="#slide-1" class="nav-item" onclick="resetToCover()" title="Cover"><i class="fa-solid fa-house"></i><span class="nav-text">Cover</span></a>
-    <a href="#slide-2" class="nav-item active" onclick="setActiveNav(this)" title="Verse"><i class="fa-solid fa-quote-left"></i><span class="nav-text">Verse</span></a>
-    <a href="#slide-3" class="nav-item" onclick="setActiveNav(this)" title="Mempelai"><i class="fa-solid fa-user"></i><span class="nav-text">Mempelai</span></a>
-    <a href="#slide-4" class="nav-item" onclick="setActiveNav(this)" title="Kalender"><i class="fa-regular fa-calendar-days"></i><span class="nav-text">Kalender</span></a>
-    <a href="#slide-5" class="nav-item" onclick="setActiveNav(this)" title="Waktu"><i class="fa-regular fa-clock"></i><span class="nav-text">Waktu</span></a>
-    <a href="#slide-6" class="nav-item" onclick="setActiveNav(this)" title="Lokasi"><i class="fa-solid fa-location-dot"></i><span class="nav-text">Lokasi</span></a>
-    <a href="#slide-7" class="nav-item" onclick="setActiveNav(this)" title="Booth"><i class="fa-solid fa-camera"></i><span class="nav-text">Booth</span></a>
-    <a href="#slide-8" class="nav-item" onclick="setActiveNav(this)" title="Galeri"><i class="fa-regular fa-image"></i><span class="nav-text">Galeri</span></a>
-    <a href="#slide-9" class="nav-item" onclick="setActiveNav(this)" title="RSVP"><i class="fa-regular fa-note-sticky"></i><span class="nav-text">RSVP</span></a>
-    <a href="#slide-10" class="nav-item" onclick="setActiveNav(this)" title="Hadiah"><i class="fa-solid fa-gift"></i><span class="nav-text">Hadiah</span></a>
-    <a href="#slide-11" class="nav-item" onclick="setActiveNav(this)" title="Thanks"><i class="fa-solid fa-heart"></i><span class="nav-text">Thanks</span></a>
+    <div class="nav-items-container">
+      <a href="#slide-1" class="nav-item" onclick="resetToCover()" title="Cover"><i class="fa-solid fa-house"></i><span class="nav-text">Cover</span></a>
+      <a href="#slide-2" class="nav-item" onclick="setActiveNav(this)" title="Verse"><i class="fa-solid fa-quote-left"></i><span class="nav-text">Verse</span></a>
+      <a href="#slide-3" class="nav-item active" onclick="setActiveNav(this)" title="Mempelai"><i class="fa-solid fa-user"></i><span class="nav-text">Mempelai</span></a>
+      <a href="#slide-4" class="nav-item" onclick="setActiveNav(this)" title="Kalender"><i class="fa-regular fa-calendar-days"></i><span class="nav-text">Kalender</span></a>
+      <a href="#slide-5" class="nav-item" onclick="setActiveNav(this)" title="Waktu"><i class="fa-regular fa-clock"></i><span class="nav-text">Waktu</span></a>
+      <a href="#slide-6" class="nav-item" onclick="setActiveNav(this)" title="Lokasi"><i class="fa-solid fa-location-dot"></i><span class="nav-text">Lokasi</span></a>
+      <a href="#slide-7" class="nav-item" onclick="setActiveNav(this)" title="Booth"><i class="fa-solid fa-camera"></i><span class="nav-text">Booth</span></a>
+      <a href="#slide-8" class="nav-item" onclick="setActiveNav(this)" title="Galeri"><i class="fa-regular fa-image"></i><span class="nav-text">Galeri</span></a>
+      <a href="#slide-9" class="nav-item" onclick="setActiveNav(this)" title="RSVP"><i class="fa-regular fa-note-sticky"></i><span class="nav-text">RSVP</span></a>
+      <a href="#slide-10" class="nav-item" onclick="setActiveNav(this)" title="Hadiah"><i class="fa-solid fa-gift"></i><span class="nav-text">Hadiah</span></a>
+      <a href="#slide-11" class="nav-item" onclick="setActiveNav(this)" title="Thanks"><i class="fa-solid fa-heart"></i><span class="nav-text">Thanks</span></a>
+    </div>
   </nav>
 
   <!-- Konten Utama (Di dalam Bingkai HP) -->
@@ -60,34 +62,46 @@
     <img src="Galery/bunga.png" class="floral-corner bottom-left" alt="Hiasan Bunga" loading="lazy">
     <img src="Galery/bunga.png" class="floral-corner bottom-right" alt="Hiasan Bunga" loading="lazy">
 
-    <!-- SLIDE 1: Cover Utama -->
-    <section id="slide-1" class="cover-section">
-      <div class="cover-content">
-        <p class="subtitle-doodle animate-left">THE WEDDING OF</p>
-        <h1 class="main-title animate-right">Uus & Gita</h1>
-        
-        <div class="couple-photo-wrapper animate-left">
-          <img src="Galery/foto1.jpg" alt="Uus & Gita" class="couple-img" loading="lazy">
+    <!-- ================= SLIDE 1: COVER UTAMA ================= -->
+      <section id="slide-1" class="cover-section">
+        <div class="cover-content">
+          <p class="subtitle-doodle animate-left">THE WEDDING OF</p>
+          <h1 class="main-title animate-right">Uus & Gita</h1>
+          
+          <div class="couple-photo-wrapper animate-left">
+            <img src="Galery/foto1.jpg" alt="Uus & Gita" class="couple-img" loading="lazy">
+          </div>
+          
+          <!-- 1. Kotak Nama Tamu di Atas -->
+          <div class="guest-container animate-left">
+            <p class="guest-sub">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+            <h3 id="guest-name" class="guest-title">Tamu Undangan</h3>
+          </div>
+          
+          <!-- 2. Kotak Tanggal & Hitung Mundur Merah di Bawah -->
+          <div class="cover-date-card animate-right">
+            <div class="cal-header" style="border-bottom: 1px dashed rgba(255, 255, 255, 0.3); padding-bottom: 6px; margin-bottom: 8px;">
+              <span class="cal-badge">WEDDING DAY</span>
+              <div class="cover-date-title">Minggu, 04 Oktober 2026</div>
+            </div>
+            <div class="countdown-grid">
+              <div class="time-box"><span id="days-cover">00</span><small>Hari</small></div>
+              <span class="time-separator">:</span>
+              <div class="time-box"><span id="hours-cover">00</span><small>Jam</small></div>
+              <span class="time-separator">:</span>
+              <div class="time-box"><span id="minutes-cover">00</span><small>Menit</small></div>
+              <span class="time-separator">:</span>
+              <div class="time-box"><span id="seconds-cover">00</span><small>Detik</small></div>
+            </div>
+          </div>
+
+          <p class="opening-text animate-right">
+            Tanpa mengurangi rasa hormat, kami memberikan kabar bahagia ini dan memohon restu dari Bapak/Ibu/Saudara/i untuk senantiasa mendoakan kelancaran acara pernikahan kami.
+          </p>
+
+          <button class="btn-open animate-left" onclick="openInvitation()">Buka Undangan</button>
         </div>
-
-        <div class="ribbon-date animate-right">
-          <span>04.10.2026</span>
-        </div>
-
-        <!-- Nama Tamu Undangan (Otomatis Berubah Sesuai Link ?to=...) -->
-        <div class="guest-container animate-left">
-          <p class="guest-sub">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
-          <h3 id="guest-name" class="guest-title">Tamu Undangan</h3>
-        </div>
-
-        <p class="opening-text animate-right">
-          Tanpa mengurangi rasa hormat, kami memberikan kabar bahagia ini dan memohon restu dari Bapak/Ibu/Saudara/i untuk senantiasa mendoakan kelancaran acara pernikahan kami.
-        </p>
-
-        <button class="btn-open animate-left" onclick="openInvitation()">Buka Undangan</button>
-      </div>
-    </section>
-
+      </section>
     <!-- Wrapper untuk Slide yang bisa di-scroll -->
     <div class="scroll-container">
 
