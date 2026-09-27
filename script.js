@@ -113,11 +113,22 @@ setInterval(function() {
   const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
+  const formatNum = (num) => (num > 0 ? (num < 10 ? '0' + num : num) : '00');
+
+  // Update untuk Slide Countdown biasa
   if (document.getElementById("days")) {
-    document.getElementById("days").innerText = days > 0 ? (days < 10 ? '0' + days : days) : '00';
-    document.getElementById("hours").innerText = hours > 0 ? (hours < 10 ? '0' + hours : hours) : '00';
-    document.getElementById("minutes").innerText = minutes > 0 ? (minutes < 10 ? '0' + minutes : minutes) : '00';
-    document.getElementById("seconds").innerText = seconds > 0 ? (seconds < 10 ? '0' + seconds : seconds) : '00';
+    document.getElementById("days").innerText = formatNum(days);
+    document.getElementById("hours").innerText = formatNum(hours);
+    document.getElementById("minutes").innerText = formatNum(minutes);
+    document.getElementById("seconds").innerText = formatNum(seconds);
+  }
+
+  // Update untuk Cover Utama (Slide 1)
+  if (document.getElementById("days-cover")) {
+    document.getElementById("days-cover").innerText = formatNum(days);
+    document.getElementById("hours-cover").innerText = formatNum(hours);
+    document.getElementById("minutes-cover").innerText = formatNum(minutes);
+    document.getElementById("seconds-cover").innerText = formatNum(seconds);
   }
 }, 1000);
 
