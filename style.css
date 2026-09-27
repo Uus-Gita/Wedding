@@ -61,25 +61,27 @@ img {
 }
 
 /* ==========================================
-   3. 💧 LIQUID / BUBBLE BOTTOM NAVIGATION BAR (11 ICON)
+   ✨ LIQUID GLASS NAVIGATION (EFEK KACA JERNIH)
    ========================================== */
 .bottom-nav {
   position: fixed;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 98%;
-  max-width: 440px;
-  background-color: rgba(139, 38, 62, 0.98);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  width: 95%;
+  max-width: 420px;
+  height: 60px;
+  /* Efek Kaca Buram / Frosted Glass yang Jernih */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  padding: 8px 4px;
+  padding: 0 8px;
   border-radius: 35px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.6);
   z-index: 999;
   transition: all 0.4s ease;
 }
@@ -88,28 +90,42 @@ img {
   display: none !important;
 }
 
+/* Sembunyikan elemen SVG yang lama jika ada */
+.liquid-bg {
+  display: none !important;
+}
+
+.nav-items-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .nav-item {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.75);
   text-decoration: none;
   font-size: 13px;
-  height: 38px;
-  width: 28px;
+  height: 40px;
+  width: 30px;
   border-radius: 50%;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .nav-item i {
   transition: transform 0.3s ease;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .nav-text {
   position: absolute;
-  bottom: -15px;
+  bottom: -16px;
   font-size: 7.5px;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
@@ -119,29 +135,35 @@ img {
   transition: all 0.3s ease;
   pointer-events: none;
   white-space: nowrap;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
-/* Efek Tombol Aktif Melompat / Berlubang untuk 11 Menu */
+/* Efek Kapsul Bulat Aktif (Liquid Glass Highlight) */
 .nav-item.active {
-  background-color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
   color: var(--maroon);
-  width: 52px;
-  height: 38px;
-  border-radius: 20px;
-  transform: translateY(-10px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25), 0 0 0 3px rgba(139, 38, 62, 0.95);
-  flex-direction: row;
-  gap: 2px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  transform: translateY(-12px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  flex-direction: column;
+  gap: 1px;
 }
 
 .nav-item.active i {
-  font-size: 11px;
-  transform: scale(1.1);
+  font-size: 14px;
+  transform: scale(1.15);
+  text-shadow: none;
 }
 
 .nav-item.active .nav-text {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(2px);
+  color: #fff; /* Teks di bawah atau di atas menyesuaikan */
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
 }
 
 .floating-music {
@@ -259,15 +281,34 @@ img {
 
 .couple-img { width: 100%; height: 100%; object-fit: cover; }
 
-.ribbon-date {
-  background-color: var(--maroon);
+.cover-date-card {
+  background: var(--maroon);
   color: white;
-  display: block;
+  border-radius: 14px;
+  padding: 8px 16px;
   width: fit-content;
   margin: 0 auto 10px;
-  padding: 4px 20px;
-  border-radius: 4px;
-  font-size: 16px;
+  box-shadow: 0 4px 12px rgba(139, 38, 62, 0.25);
+  border: 1.5px solid #FAF6ED;
+  text-align: center;
+}
+
+.cover-date-badge {
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 2px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.cover-date-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #FAF6ED;
 }
 
 .guest-container {
